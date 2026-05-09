@@ -10,6 +10,7 @@ export const useLoginForm = () => {
     register,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -32,5 +33,5 @@ export const useLoginForm = () => {
     }
   }
 
-  return { register, handleSubmit, errors, isSubmitting, onSubmit }
+  return { register, handleSubmit, errors, isSubmitting, onSubmit, setValue }
 }
