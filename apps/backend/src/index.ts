@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import { Elysia } from "elysia";
 import { node } from "@elysiajs/node";
-import { ensureEnvValid } from "./lib/env";
+import { ensureEnvValid, env } from "./lib/env";
 import { routes } from "./modules";
 import { errorHandler, requestLogger } from "./middlewares";
 import openapi from "@elysia/openapi";
@@ -28,6 +28,11 @@ app.use(
         { name: Tags.task, description: "Tasks related endpoints" },
         { name: Tags.user, description: "User related endpoints" },
       ],
+      info: {
+        title: "API REST documentation for FlowBoard",
+        version: "1.0",
+        description: `For Auth Related endpoints, check ${env.BETTER_AUTH_URL}/api/v1/auth/openapi`,
+      },
     },
   }),
 );

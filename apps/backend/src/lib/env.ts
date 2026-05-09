@@ -8,6 +8,7 @@ const envSchema = z.object({
   DATABASE_URL: z.url("DATABASE_URL debe ser una URL válida"),
   BETTER_AUTH_SECRET: z.string(),
   BETTER_AUTH_URL: z.string(),
+  SEED_USER_PASSWORD: z.string(),
 });
 
 type EnvType = z.infer<typeof envSchema>;
