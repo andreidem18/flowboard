@@ -9,6 +9,10 @@
     "build": "tsc src/index.ts --outDir dist",
     "start": "NODE_ENV=production node dist/index.js",
     "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:run": "vitest run",
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate"
   },
@@ -34,8 +38,11 @@
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^25.6.2",
     "@types/pg": "^8.20.0",
+    "@vitest/coverage-v8": "^4.1.5",
+    "@vitest/ui": "^4.1.5",
     "prisma": "^7.8.0",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
   }
 }
