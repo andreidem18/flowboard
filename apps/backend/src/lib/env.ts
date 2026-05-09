@@ -9,6 +9,7 @@ const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string(),
   BETTER_AUTH_URL: z.string(),
   SEED_USER_PASSWORD: z.string(),
+  FRONT_URL: z.string(),
 });
 
 type EnvType = z.infer<typeof envSchema>;

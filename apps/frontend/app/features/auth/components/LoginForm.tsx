@@ -5,6 +5,8 @@ import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { Spinner } from "~/components/ui/spinner"
 import { loginSchema, type LoginFormData } from "../schemas/auth.schema"
+import { useLoginMutation } from "../mutation"
+import { toast } from "sonner"
 
 export const LoginForm = () => {
   const {
@@ -14,12 +16,13 @@ export const LoginForm = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   })
+  const { mutateAsync: loginMutation } = useLoginMutation()
 
   const onSubmit = async (data: LoginFormData) => {
     try {
       // TODO: Implementar llamada API de login
-      console.log("Login data:", data)
-      // await loginMutation.mutate(data);
+      await loginMutation(data)
+      toast.success("Login exitoso")
     } catch (error) {
       console.error("Login error:", error)
     }

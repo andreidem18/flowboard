@@ -8,6 +8,7 @@ import { errorHandler, requestLogger } from "./middlewares";
 import openapi from "@elysia/openapi";
 import z from "zod";
 import { Tags } from "./constants";
+import { cors } from "@elysia/cors";
 
 ensureEnvValid();
 
@@ -16,6 +17,13 @@ const app = new Elysia({ adapter: node() });
 app.onBeforeHandle(requestLogger);
 
 app.onError(errorHandler);
+
+console.log({ "env.FRONT_URL": env.FRONT_URL });
+app.use(
+  cors({
+    origin: [env.FRONT_URL],
+  }),
+);
 
 app.use(
   openapi({
