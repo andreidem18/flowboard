@@ -1,41 +1,12 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { Spinner } from "~/components/ui/spinner"
-import { loginSchema, type LoginFormData } from "../schemas/auth.schema"
-import { useLoginMutation } from "../mutation"
-import { toast } from "sonner"
-import { checkAuthError } from "../helpers"
+import { useLoginForm } from "../hooks"
 
 export const LoginForm = () => {
-  const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-  })
-  const { mutateAsync: loginMutation } = useLoginMutation()
-
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      // TODO: Implementar llamada API de login
-      await loginMutation(data)
-      toast.success("Login exitoso")
-    } catch (error) {
-      if (checkAuthError(error, "INVALID_EMAIL_OR_PASSWORD")) {
-        setError("form", {
-          type: "manual",
-          message: "Invalid credentials",
-        })
-        return
-      }
-      throw new Error("Error logging in")
-    }
-  }
+  const { register, handleSubmit, errors, isSubmitting, onSubmit } =
+    useLoginForm()
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
