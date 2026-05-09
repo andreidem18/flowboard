@@ -1,6 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { projectService } from "@/modules/projects/project.services";
 import { projectRepository } from "@/modules/projects/project.repository";
+import {
+  mockProject,
+  mockProjects,
+  mockNewProject,
+  mockUpdatedProject,
+} from "./mockData";
 
 // Mock del repository
 vi.mock("@/modules/projects/project.repository", () => ({
@@ -20,11 +26,6 @@ describe("ProjectService", () => {
 
   describe("getAll", () => {
     it("should return all projects from repository", async () => {
-      const mockProjects = [
-        { id: 1, name: "Project 1", description: null, color: null },
-        { id: 2, name: "Project 2", description: null, color: null },
-      ];
-
       vi.mocked(projectRepository.getAll).mockResolvedValue(mockProjects);
 
       const result = await projectService.getAll();
@@ -37,18 +38,12 @@ describe("ProjectService", () => {
   describe("create", () => {
     it("should create a new project", async () => {
       const createBody = { name: "New Project" };
-      const mockCreatedProject = {
-        id: 1,
-        name: "New Project",
-        description: null,
-        color: null,
-      };
 
-      vi.mocked(projectRepository.create).mockResolvedValue(mockCreatedProject);
+      vi.mocked(projectRepository.create).mockResolvedValue(mockNewProject);
 
       const result = await projectService.create(createBody);
 
-      expect(result).toEqual(mockCreatedProject);
+      expect(result).toEqual(mockNewProject);
       expect(projectRepository.create).toHaveBeenCalledWith(createBody);
     });
   });
@@ -56,12 +51,6 @@ describe("ProjectService", () => {
   describe("delete", () => {
     it("should delete a project after verifying it exists", async () => {
       const projectId = 1;
-      const mockProject = {
-        id: 1,
-        name: "Project 1",
-        description: null,
-        color: null,
-      };
 
       vi.mocked(projectRepository.getOne).mockResolvedValue(mockProject);
       vi.mocked(projectRepository.delete).mockResolvedValue(undefined);
@@ -90,18 +79,6 @@ describe("ProjectService", () => {
     it("should update a project after verifying it exists", async () => {
       const projectId = 1;
       const updateBody = { name: "Updated Project" };
-      const mockProject = {
-        id: 1,
-        name: "Project 1",
-        description: null,
-        color: null,
-      };
-      const mockUpdatedProject = {
-        id: 1,
-        name: "Updated Project",
-        description: null,
-        color: null,
-      };
 
       vi.mocked(projectRepository.getOne).mockResolvedValue(mockProject);
       vi.mocked(projectRepository.update).mockResolvedValue(mockUpdatedProject);
