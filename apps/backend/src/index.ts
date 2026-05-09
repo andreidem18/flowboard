@@ -23,10 +23,17 @@ app.use(
       zod: z.toJSONSchema,
     },
     documentation: {
-      tags: [{ name: Tags.project, description: "Projects related endpoints" }],
+      tags: [
+        { name: Tags.project, description: "Projects related endpoints" },
+        { name: Tags.user, description: "User related endpoints" },
+      ],
     },
   }),
 );
+
+// app.all("/api/auth/*", async ({ request }) => {
+//   return auth.handler(request);
+// });
 
 app.use(routes);
 

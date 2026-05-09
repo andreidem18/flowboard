@@ -9,18 +9,22 @@ import {
 } from "@repo/shared";
 import { numericIdParamSchema } from "@/common/schemas";
 import { Tags } from "@/constants";
+import { betterAuth } from "@/middlewares";
 
 export const projectRoutes = new Elysia({
   prefix: "/projects",
   tags: [Tags.project],
-});
+}).use(betterAuth);
 
 projectRoutes.get(
   "/",
   () => {
     return projectService.getAll();
   },
-  { response: { 200: getAllProjectsSchema } },
+  {
+    response: { 200: getAllProjectsSchema },
+    auth: true,
+  },
 );
 
 projectRoutes.post(
@@ -32,6 +36,7 @@ projectRoutes.post(
   {
     body: createProjectBodySchema,
     response: { 201: projectSchema },
+    auth: true,
   },
 );
 
@@ -44,6 +49,7 @@ projectRoutes.delete(
   {
     params: numericIdParamSchema,
     response: { 200: deleteResSchema },
+    auth: true,
   },
 );
 
@@ -56,5 +62,6 @@ projectRoutes.patch(
     params: numericIdParamSchema,
     body: updateProjectBodySchema,
     response: { 200: projectSchema },
+    auth: true,
   },
 );
