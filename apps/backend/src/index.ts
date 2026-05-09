@@ -5,11 +5,13 @@ import { node } from "@elysiajs/node";
 import { prisma } from "./lib/prisma";
 import { ensureEnvValid } from "./lib/env";
 import { routes } from "./routes";
-import { errorHandler } from "./middlewares";
+import { errorHandler, requestLogger } from "./middlewares";
 
 ensureEnvValid();
 
 const app = new Elysia({ adapter: node() });
+
+app.onBeforeHandle(requestLogger);
 
 app.onError(errorHandler);
 
