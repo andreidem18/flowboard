@@ -24,8 +24,8 @@ describe("ProjectRepository", () => {
   describe("getAll", () => {
     it("should return all projects", async () => {
       const mockProjects = [
-        { id: 1, name: "Project 1" },
-        { id: 2, name: "Project 2" },
+        { id: 1, name: "Project 1", description: null, color: null },
+        { id: 2, name: "Project 2", description: null, color: null },
       ];
 
       vi.mocked(prisma.project.findMany).mockResolvedValue(mockProjects);
@@ -49,7 +49,12 @@ describe("ProjectRepository", () => {
   describe("create", () => {
     it("should create a new project", async () => {
       const createBody = { name: "New Project" };
-      const mockCreatedProject = { id: 1, name: "New Project" };
+      const mockCreatedProject = {
+        id: 1,
+        name: "New Project",
+        description: null,
+        color: null,
+      };
 
       vi.mocked(prisma.project.create).mockResolvedValue(mockCreatedProject);
 
@@ -62,7 +67,12 @@ describe("ProjectRepository", () => {
 
   describe("getOne", () => {
     it("should return a project when it exists", async () => {
-      const mockProject = { id: 1, name: "Project 1" };
+      const mockProject = {
+        id: 1,
+        name: "Project 1",
+        description: null,
+        color: null,
+      };
       vi.mocked(prisma.project.findUnique).mockResolvedValue(mockProject);
 
       const result = await projectRepository.getOne(1);
@@ -103,7 +113,12 @@ describe("ProjectRepository", () => {
     it("should update a project", async () => {
       const projectId = 1;
       const updateBody = { name: "Updated Project" };
-      const mockUpdatedProject = { id: 1, name: "Updated Project" };
+      const mockUpdatedProject = {
+        id: 1,
+        name: "Updated Project",
+        description: null,
+        color: null,
+      };
 
       vi.mocked(prisma.project.update).mockResolvedValue(mockUpdatedProject);
 

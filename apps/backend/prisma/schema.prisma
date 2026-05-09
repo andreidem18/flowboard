@@ -18,10 +18,52 @@ model Test {
 }
 
 model Project {
-  id   Int    @id @default(autoincrement())
-  name String
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  color       String?
+  tasks       Task[]
 
   @@map("projects")
+}
+
+model Task {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+
+  status   TaskStatus   @default(NEW)
+  priority TaskPriority @default(MEDIUM)
+
+  deadline   DateTime?
+  finishedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projectId Int
+  userId    String
+
+  project Project @relation(fields: [projectId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@index([projectId])
+  @@index([status])
+  @@index([deadline])
+  @@map("tasks")
+}
+
+enum TaskStatus {
+  NEW
+  IN_PROGRESS
+  STOPPED
+  FINISHED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
 }
 
 model User {
@@ -34,6 +76,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  tasks         Task[]
 
   @@unique([email])
   @@map("user")
