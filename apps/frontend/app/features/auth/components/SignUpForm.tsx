@@ -5,23 +5,34 @@ import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { Spinner } from "~/components/ui/spinner"
 import { signUpSchema, type SignUpFormData } from "../schemas/auth.schema"
+import { useSignupMutation } from "../mutation"
+import { toast } from "sonner"
+import { checkAuthError } from "../helpers"
 
 export const SignUpForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
   } = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
   })
+  const { mutateAsync: signupMutation } = useSignupMutation()
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
-      // TODO: Implementar llamada API de signup
-      console.log("Signup data:", data)
-      // await signUpMutation.mutate(data);
+      await signupMutation(data)
+      toast.success("Account created successfully")
     } catch (error) {
-      console.error("Signup error:", error)
+      if (checkAuthError(error, "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL")) {
+        setError("email", {
+          type: "manual",
+          message: "This email is already registered",
+        })
+        return
+      }
+      throw new Error("Error creating user")
     }
   }
 

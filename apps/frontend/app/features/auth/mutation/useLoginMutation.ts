@@ -12,7 +12,7 @@ export const useLoginMutation = () => {
           "Content-Type": "application/json",
         },
       })
-      if (!res.ok) throw new Error("Login error")
+      if (!res.ok) throw await res.json()
       const data = (await res.json()) as LoginRes
       return data
     },

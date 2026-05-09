@@ -7,11 +7,13 @@ import { Spinner } from "~/components/ui/spinner"
 import { loginSchema, type LoginFormData } from "../schemas/auth.schema"
 import { useLoginMutation } from "../mutation"
 import { toast } from "sonner"
+import { checkAuthError } from "../helpers"
 
 export const LoginForm = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -24,7 +26,14 @@ export const LoginForm = () => {
       await loginMutation(data)
       toast.success("Login exitoso")
     } catch (error) {
-      console.error("Login error:", error)
+      if (checkAuthError(error, "INVALID_EMAIL_OR_PASSWORD")) {
+        setError("form", {
+          type: "manual",
+          message: "Invalid credentials",
+        })
+        return
+      }
+      throw new Error("Error logging in")
     }
   }
 
@@ -56,6 +65,9 @@ export const LoginForm = () => {
           <p className="text-sm text-red-500">{errors.password.message}</p>
         )}
       </div>
+      {errors.form && (
+        <p className="text-sm text-red-500">{errors.form.message}</p>
+      )}
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting && <Spinner />}
         {isSubmitting ? "Logging in..." : "Login"}

@@ -4,7 +4,7 @@ import { userSchema } from "./user";
 export const signupBodySchema = z.object({
   name: z.string(),
   email: z.string(),
-  passowrd: z.string(),
+  password: z.string(),
 });
 
 export const signupResSchema = z.object({
