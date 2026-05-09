@@ -5,6 +5,9 @@ import { node } from "@elysiajs/node";
 import { ensureEnvValid } from "./lib/env";
 import { routes } from "./routes";
 import { errorHandler, requestLogger } from "./middlewares";
+import openapi from "@elysia/openapi";
+import z from "zod";
+import { Tags } from "./constants";
 
 ensureEnvValid();
 
@@ -13,6 +16,17 @@ const app = new Elysia({ adapter: node() });
 app.onBeforeHandle(requestLogger);
 
 app.onError(errorHandler);
+
+app.use(
+  openapi({
+    mapJsonSchema: {
+      zod: z.toJSONSchema,
+    },
+    documentation: {
+      tags: [{ name: Tags.project, description: "Projects related endpoints" }],
+    },
+  }),
+);
 
 app.use(routes);
 
