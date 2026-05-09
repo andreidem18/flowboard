@@ -1,11 +1,6 @@
 import { ErrorHandler } from "elysia";
 
-export const errorHandler: ErrorHandler = ({
-  code,
-  error,
-  set,
-}) => {
-
+export const errorHandler: ErrorHandler = ({ code, error, set }) => {
   switch (code) {
     case "NOT_FOUND":
       set.status = 404;

@@ -2,7 +2,6 @@ import "dotenv/config";
 
 import { Elysia } from "elysia";
 import { node } from "@elysiajs/node";
-import { prisma } from "./lib/prisma";
 import { ensureEnvValid } from "./lib/env";
 import { routes } from "./routes";
 import { errorHandler, requestLogger } from "./middlewares";

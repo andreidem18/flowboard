@@ -23,16 +23,20 @@ projectRoutes.delete(
   "/:id",
   async ({ params: { id } }) => {
     await projectService.delete(id);
-    return { ok: true }
+    return { ok: true };
   },
   {
     params: numericIdParamSchema,
   },
 );
 
-projectRoutes.patch("/:id", async ({params: {id}, body}) => {
-  return projectService.update(id, body);
-}, {
-  params: numericIdParamSchema,
-  body: updateProjectBodySchema
-})
+projectRoutes.patch(
+  "/:id",
+  async ({ params: { id }, body }) => {
+    return projectService.update(id, body);
+  },
+  {
+    params: numericIdParamSchema,
+    body: updateProjectBodySchema,
+  },
+);

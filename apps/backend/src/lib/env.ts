@@ -1,11 +1,11 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * Schema para validar las variables de entorno
  * Define el contrato esperado para todas las variables de entorno necesarias
  */
 const envSchema = z.object({
-  DATABASE_URL: z.string().url('DATABASE_URL debe ser una URL válida'),
+  DATABASE_URL: z.url("DATABASE_URL debe ser una URL válida"),
 });
 
 type EnvType = z.infer<typeof envSchema>;
@@ -20,9 +20,9 @@ function validateEnv(): EnvType {
   const parsed = envSchema.safeParse(process.env);
 
   if (!parsed.success) {
-    console.error('❌ Error Validating env variables:');
+    console.error("❌ Error Validating env variables:");
     parsed.error.issues.forEach((issue) => {
-      console.error(`  - ${issue.path.join('.')}: ${issue.message}`);
+      console.error(`  - ${issue.path.join(".")}: ${issue.message}`);
     });
     process.exit(1);
   }
