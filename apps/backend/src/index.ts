@@ -1,6 +1,9 @@
 import { Elysia } from 'elysia'
 import { node } from '@elysiajs/node'
 import { prisma } from './lib/prisma';
+import { ensureEnvValid } from './lib/env';
+
+ensureEnvValid();
 
 const app = new Elysia({ adapter: node() })
 	.get('/', async () => {
@@ -9,6 +12,6 @@ const app = new Elysia({ adapter: node() })
   })
 	.listen(3000, ({ hostname, port }) => {
 		console.log(
-			`🦊 Elysia is running at ${hostname}:${port}`
+			`Backend running at ${hostname}:${port}`
 		)
 	});
