@@ -3,7 +3,7 @@ import "dotenv/config";
 import { Elysia } from "elysia";
 import { node } from "@elysiajs/node";
 import { ensureEnvValid } from "./lib/env";
-import { routes } from "./routes";
+import { routes } from "./modules";
 import { errorHandler, requestLogger } from "./middlewares";
 import openapi from "@elysia/openapi";
 import z from "zod";
@@ -30,10 +30,6 @@ app.use(
     },
   }),
 );
-
-// app.all("/api/auth/*", async ({ request }) => {
-//   return auth.handler(request);
-// });
 
 app.use(routes);
 

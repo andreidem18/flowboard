@@ -1,5 +1,5 @@
 import Elysia from "elysia";
-import { projectRoutes } from "../modules/projects/project.routes";
+import { projectRoutes } from "./projects/project.routes";
 import { betterAuth } from "@/middlewares";
 import { userRoutes } from "@/modules/user/user.routes";
 
