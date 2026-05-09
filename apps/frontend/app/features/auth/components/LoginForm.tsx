@@ -2,6 +2,7 @@ import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { Spinner } from "~/components/ui/spinner"
+import { Checkbox } from "~/components/ui/checkbox"
 import { Wand2 } from "lucide-react"
 import { useLoginForm } from "../hooks"
 
@@ -46,6 +47,19 @@ export const LoginForm = () => {
         {errors.password && (
           <p className="text-sm text-red-500">{errors.password.message}</p>
         )}
+      </div>
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="rememberMe"
+          {...register("rememberMe")}
+          disabled={isSubmitting}
+        />
+        <Label
+          htmlFor="rememberMe"
+          className="cursor-pointer text-sm font-normal"
+        >
+          Remember me
+        </Label>
       </div>
       {errors.form && (
         <p className="text-sm text-red-500">{errors.form.message}</p>

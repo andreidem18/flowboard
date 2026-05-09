@@ -14,6 +14,7 @@ export const signupResSchema = z.object({
 export const loginBodySchema = z.object({
   email: z.string(),
   password: z.string(),
+  rememberMe: z.boolean(),
 });
 
 export const loginResSchema = z.object({
