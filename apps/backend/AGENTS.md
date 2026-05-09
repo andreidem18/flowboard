@@ -49,13 +49,15 @@ Each module should follow this structure:
 modules/
   tasks/
     task.controller.ts
-    task.service.ts
     task.repository.ts
     task.schema.ts
     task.types.ts
     task.routes.ts
 
 ---
+
+Create the schema and types only if needed. If the types could be used in the frontend,
+create them in the `packages/shared` module
 
 # Layer Responsibilities
 

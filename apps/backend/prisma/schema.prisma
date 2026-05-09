@@ -16,3 +16,10 @@ model Test {
   id    Int     @id @default(autoincrement())
   text String
 }
+
+model Project {
+  id   Int @id @default(autoincrement())
+  name String
+
+  @@map("projects")
+}

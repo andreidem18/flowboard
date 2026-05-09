@@ -15,7 +15,7 @@
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": false,
 
 
     // Recommended Options
@@ -27,6 +27,11 @@
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "esModuleInterop": true,
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
   }
 }
