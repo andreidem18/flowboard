@@ -25,6 +25,7 @@ app.use(
     documentation: {
       tags: [
         { name: Tags.project, description: "Projects related endpoints" },
+        { name: Tags.task, description: "Tasks related endpoints" },
         { name: Tags.user, description: "User related endpoints" },
       ],
     },
