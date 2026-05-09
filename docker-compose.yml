@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:17
+    restart: always
+
+    env_file:
+      - .env.docker
+
+    ports:
+      - "5435:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  backend-flowboard:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+
+    depends_on:
+      - postgres
+
+    ports:
+      - "3000:3000"
+
+    env_file:
+      - .env.docker
+
+volumes:
+  postgres_data:
+
