@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { loginSchema, type LoginFormData } from "../schemas/auth.schema"
-import { useLoginMutation } from "../mutation"
+import { useLoginMutation } from "../mutations"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { checkAuthError } from "../helpers"

@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { checkAuthError } from "../helpers"
-import { useSignupMutation } from "../mutation"
+import { useSignupMutation } from "../mutations"
 import { type SignUpFormData, signUpSchema } from "../schemas/auth.schema"
 
 export const useSignUpForm = () => {
