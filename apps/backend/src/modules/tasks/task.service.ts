@@ -44,6 +44,7 @@ export const taskService = {
     const tasksByProjectFormatted = projectsWithTasks.map((project) => ({
       id: project.id,
       name: project.name,
+      color: project.color,
 
       totalTasks: project.tasks.length,
 

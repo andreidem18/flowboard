@@ -1,4 +1,9 @@
-import { DashboardOverview } from "~/features/dashboard/components";
+import {
+  DashboardOverview,
+  ProjectProgress,
+  TasksByPriorityChart,
+  TasksByStatusChart,
+} from "~/features/dashboard/components";
 
 export default function DashboardPage() {
   return (
@@ -12,6 +17,13 @@ export default function DashboardPage() {
         </p>
       </div>
       <DashboardOverview />
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <TasksByStatusChart />
+        <TasksByPriorityChart />
+      </div>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <ProjectProgress />
+      </div>
     </div>
   );
 }

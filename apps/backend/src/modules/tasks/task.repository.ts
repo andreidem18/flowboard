@@ -107,6 +107,7 @@ export const taskRepository = {
       select: {
         id: true,
         name: true,
+        color: true,
 
         tasks: {
           select: {

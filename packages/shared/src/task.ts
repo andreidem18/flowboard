@@ -74,6 +74,7 @@ export const tasksCountSchema = z.object({
 export const tasksByProjectSchema = z.object({
   id: z.number(),
   name: z.string(),
+  color: z.string().nullable(),
   totalTasks: z.number(),
   finishedTasks: z.number(),
   inProgressTasks: z.number(),
