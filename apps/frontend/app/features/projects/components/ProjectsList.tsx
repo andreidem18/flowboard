@@ -1,6 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
-import { getAllProjectsQueryOptions } from "../queries";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
@@ -9,9 +6,27 @@ import {
   CardTitle,
   CardDescription,
 } from "~/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/components/ui/alert-dialog";
+import { useProjectsList } from "../hooks/useProjectsList";
 
 export const ProjectsList = () => {
-  const { data: projects, isLoading } = useQuery(getAllProjectsQueryOptions());
+  const {
+    projects,
+    isLoading,
+    deleteConfirmOpen,
+    confirmDelete,
+    handleDeleteProject,
+    setDeleteConfirmOpen,
+  } = useProjectsList();
 
   // TODO: Implement skeletons
   if (isLoading) return <>loading...</>;
@@ -43,8 +58,7 @@ export const ProjectsList = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    // TODO: add delete feature
-                    // onClick={() => handleDeleteProject(project.id)}
+                    onClick={() => handleDeleteProject(project.id)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -65,6 +79,24 @@ export const ProjectsList = () => {
           </p>
         </div>
       )}
+
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete this project and its tasks. This
+              action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
