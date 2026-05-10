@@ -4,7 +4,7 @@ import {
   type ProjectFormData,
 } from "../schemas/projects.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { useCreateProjectMutation } from "../mutations";
 import type { Project } from "@repo/shared";
 
 interface Props {
@@ -27,23 +27,17 @@ export const useProjectForm = ({ project, onSuccess }: Props) => {
     },
   });
 
-  const onSubmit = async (/* data: ProjectFormData */) => {
-    try {
-      // TODO: Conectar con mutación de crear/actualizar proyecto
-      // const mutation = project
-      //   ? await updateProjectMutation(project.id, data)
-      //   : await createProjectMutation(data);
+  const { mutateAsync: createProject } = useCreateProjectMutation({
+    onSuccess,
+  });
 
-      toast.success(
-        project
-          ? "Project updated successfully"
-          : "Project created successfully"
-      );
-      onSuccess?.();
-    } catch (error) {
-      toast.error("Failed to save project");
-      console.error("Error saving project:", error);
+  const onSubmit = async (data: ProjectFormData) => {
+    if (project) {
+      // TODO: Conectar con mutación de actualizar proyecto
+      throw new Error("Update not implemented yet");
     }
+
+    await createProject(data);
   };
 
   return {
