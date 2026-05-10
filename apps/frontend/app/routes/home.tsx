@@ -1,8 +1,14 @@
+import { useNavigate } from "react-router"
 import { Button } from "~/components/ui/button"
+import { useLogoutMutation } from "~/features/auth/mutations"
 import { useTheme } from "~/providers/ThemeProvider"
 
 export default function Home() {
   const { setTheme, theme } = useTheme()
+  const navigate = useNavigate()
+  const { mutate } = useLogoutMutation({
+    onSuccess: () => navigate("/auth"),
+  })
 
   return (
     <div className="flex min-h-svh p-6">
@@ -16,6 +22,9 @@ export default function Home() {
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
             Button
+          </Button>
+          <Button className="mt-2" onClick={() => mutate()}>
+            Logout
           </Button>
         </div>
       </div>

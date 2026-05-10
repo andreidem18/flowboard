@@ -18,10 +18,10 @@ app.onBeforeHandle(requestLogger);
 
 app.onError(errorHandler);
 
-console.log({ "env.FRONT_URL": env.FRONT_URL });
 app.use(
   cors({
     origin: [env.FRONT_URL],
+    credentials: true,
   }),
 );
 

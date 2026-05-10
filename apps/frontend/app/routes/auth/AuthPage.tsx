@@ -1,3 +1,4 @@
+import { Navigate } from "react-router"
 import {
   Card,
   CardContent,
@@ -7,8 +8,12 @@ import {
 } from "~/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { LoginForm, SignUpForm } from "~/features/auth/components"
+import { useAuth } from "~/features/auth/hooks"
 
 export default function AuthPage() {
+  const { isAuthenticated } = useAuth()
+  if (isAuthenticated) return <Navigate to="/" />
+
   return (
     <div className="flex size-full min-h-dvh items-center justify-center">
       <Card className="w-full max-w-md">
