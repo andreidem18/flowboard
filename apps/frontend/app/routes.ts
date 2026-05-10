@@ -6,7 +6,15 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
-  layout("./guards/RequireSession.tsx", [index("routes/home.tsx")]),
+  index("routes/RedirectPage.tsx"),
 
   route("/auth", "./routes/auth/AuthPage.tsx"),
+
+  layout("./guards/RequireSession.tsx", [
+    layout("./routes/app/AppLayout.tsx", [
+      route("/app/dashboard", "./routes/app/dashboard/DashboardPage.tsx"),
+      route("/app/projects", "./routes/app/projects/ProjectsPage.tsx"),
+      route("/app/board", "./routes/app/board/BoardPage.tsx"),
+    ]),
+  ]),
 ] satisfies RouteConfig;
