@@ -1,12 +1,12 @@
 import { Button } from "~/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "~/components/ui/sheet";
 import { useBoardStore } from "../../stores/useBoardStore";
 import { useTaskForm } from "../../hooks/useTaskForm";
 import { TaskNameInput } from "./TaskNameInput";
@@ -25,14 +25,14 @@ export function TaskForm() {
   const task = useBoardStore((s) => s.selectedTask);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>{task ? "Edit Task" : "Create New Task"}</DialogTitle>
-          <DialogDescription>
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent className="inset-x-0 px-5 data-[side=right]:w-screen sm:inset-x-auto sm:px-10 data-[side=right]:sm:max-w-150">
+        <SheetHeader className="pt-10">
+          <SheetTitle>{task ? "Edit Task" : "Create New Task"}</SheetTitle>
+          <SheetDescription>
             {task ? "Update task details" : "Add a new task to your board"}
-          </DialogDescription>
-        </DialogHeader>
+          </SheetDescription>
+        </SheetHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
@@ -68,7 +68,7 @@ export function TaskForm() {
               />
             </div>
           </div>
-          <DialogFooter>
+          <SheetFooter>
             <Button
               type="button"
               variant="outline"
@@ -84,9 +84,9 @@ export function TaskForm() {
                   ? "Update Task"
                   : "Create Task"}
             </Button>
-          </DialogFooter>
+          </SheetFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }
