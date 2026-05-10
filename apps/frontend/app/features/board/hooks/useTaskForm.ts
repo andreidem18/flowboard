@@ -5,9 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useBoardStore } from "../stores/useBoardStore";
 import { format } from "date-fns";
 import type { Task, TaskStatus } from "@repo/shared";
+import { useQuery } from "@tanstack/react-query";
+import { getAllUsersQueryOptions } from "~/features/users/queries";
 
 export const useTaskForm = () => {
   const { selectedTask, selectedStatus } = useBoardStore();
+
+  const { data: allUsers } = useQuery(getAllUsersQueryOptions());
 
   const defaultValues = useMemo(
     () => getDefaultValues(selectedTask, selectedStatus),
@@ -40,6 +44,7 @@ export const useTaskForm = () => {
     errors,
     isSubmitting,
     onSubmit,
+    allUsers,
   };
 };
 

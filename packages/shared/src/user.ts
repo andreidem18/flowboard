@@ -26,6 +26,14 @@ export const getLoggedUserSchema = z.object({
   session: sessionSchema,
 });
 
+export const getAllUsersSchema = z.array(userSchema);
+
+export const getAllUsersQuery = z.object({
+  name: z.string().optional(),
+});
+
 export type User = z.infer<typeof userSchema>;
 export type Session = z.infer<typeof sessionSchema>;
 export type GetLoggedUser = z.infer<typeof getLoggedUserSchema>;
+export type GetAllUsersQuery = z.infer<typeof getAllUsersQuery>;
+export type GetAllUsers = z.infer<typeof getAllUsersSchema>;

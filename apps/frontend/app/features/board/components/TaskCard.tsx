@@ -4,9 +4,9 @@ import { format } from "date-fns";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
-import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { DeleteConfirmDialog } from "~/components/ui/delete-confirm-dialog";
 import { useTaskCard } from "../hooks";
+import { UserAvatar } from "./UserAvatar";
 
 interface Props {
   task: Task;
@@ -87,11 +87,7 @@ export const TaskCard = ({ task, projectId }: Props) => {
               )}
             </div>
             <div className="flex h-fit items-center gap-2 pt-1">
-              <Avatar className="h-6 w-6">
-                <AvatarFallback>
-                  {task.user.name.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar userName={task.user.name} />
               <span className="text-xs text-slate-600">{task.user.name}</span>
             </div>
           </div>

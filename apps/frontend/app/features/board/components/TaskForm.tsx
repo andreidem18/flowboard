@@ -14,10 +14,18 @@ import {
 import { useBoardStore } from "../stores/useBoardStore";
 import { useTaskForm } from "../hooks/useTaskForm";
 import { FormSelect } from "./FormSelect";
+import { UserAvatar } from "./UserAvatar";
 
 export function TaskForm() {
-  const { register, control, handleSubmit, errors, isSubmitting, onSubmit } =
-    useTaskForm();
+  const {
+    register,
+    control,
+    handleSubmit,
+    errors,
+    isSubmitting,
+    onSubmit,
+    allUsers,
+  } = useTaskForm();
 
   const open = useBoardStore((s) => s.isDialogOpen);
   const onOpenChange = useBoardStore((s) => s.setDialogOpen);
@@ -63,49 +71,22 @@ export function TaskForm() {
                 )}
               </div>
               {/* TODO: allow update user */}
-              {/* {projects && projects.length > 0 && (
-                <div className="space-y-2">
-                  <Label htmlFor="project">Project</Label>
-                  <Controller
-                    name="projectId"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        value={field.value?.toString() || ""}
-                        onValueChange={(v) => field.onChange(parseInt(v))}
-                        disabled={isSubmitting}
-                      >
-                        <SelectTrigger className="w-full" id="project">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {projects.map((project) => (
-                            <SelectItem
-                              key={project.id}
-                              value={project.id.toString()}
-                            >
-                              <div className="flex items-center gap-2">
-                                <div
-                                  className="h-2 w-2 rounded-full"
-                                  style={{
-                                    backgroundColor: project.color || "#64748b",
-                                  }}
-                                />
-                                {project.name}
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  {errors.projectId && (
-                    <p className="text-sm text-red-500">
-                      {errors.projectId.message}
-                    </p>
-                  )}
-                </div>
-              )} */}
+              {allUsers && (
+                <FormSelect
+                  name="userId"
+                  label="User"
+                  control={control}
+                  errors={errors}
+                  disabled={isSubmitting}
+                >
+                  {allUsers?.map((user) => (
+                    <SelectItem value={user.id}>
+                      <UserAvatar userName={user.name} />
+                      {user.name}
+                    </SelectItem>
+                  ))}
+                </FormSelect>
+              )}
               <FormSelect
                 name="status"
                 label="Status"

@@ -14,6 +14,7 @@ export const taskFormSchema = z.object({
   status: taskStatusSchema,
   priority: taskPrioritySchema,
   deadline: z.string().optional().or(z.literal("")),
+  userId: z.string().optional(),
 });
 
 export type TaskFormData = z.infer<typeof taskFormSchema>;
