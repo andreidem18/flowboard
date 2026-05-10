@@ -15,6 +15,10 @@ export default [
       route("/app/dashboard", "./routes/app/dashboard/DashboardPage.tsx"),
       route("/app/projects", "./routes/app/projects/ProjectsPage.tsx"),
       route("/app/board", "./routes/app/board/BoardPage.tsx"),
+      route(
+        "/app/board/:projectId",
+        "./routes/app/board/[projectId]/BoardDetail.tsx"
+      ),
     ]),
   ]),
 ] satisfies RouteConfig;
