@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import env from "~/lib/env";
 import { queryClient } from "~/providers/ReactQueryClientProvider";
 import type { UpdateTaskBody, Task } from "@repo/shared";
-import { TASK_QUERY_KEY } from "../queries";
+import { TASKS_QUERY_KEY } from "../queries";
 
 interface Params {
   taskId: number;
@@ -35,7 +35,7 @@ export const useUpdateTaskMutation = ({
     },
     onSuccess: () => {
       // Invalidate the queries to ensure fresh data
-      queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, projectId] });
+      queryClient.invalidateQueries({ queryKey: [TASKS_QUERY_KEY, projectId] });
       toast.success("Task updated successfully");
       onSuccess?.();
     },

@@ -3,8 +3,7 @@ import type { Control, FieldErrors } from "react-hook-form";
 import type { TaskFormData } from "../../schemas/tasks.schema";
 import { FormSelect } from "./FormSelect";
 import { UserAvatar } from "../UserAvatar";
-import { useQuery } from "@tanstack/react-query";
-import { getAllUsersQueryOptions } from "~/features/users/queries";
+import { useGetAllUsers } from "~/features/users/queries";
 
 interface UserSelectorProps {
   control: Control<TaskFormData>;
@@ -17,7 +16,7 @@ export function UserSelector({
   errors,
   isSubmitting,
 }: UserSelectorProps) {
-  const { data: allUsers } = useQuery(getAllUsersQueryOptions());
+  const { data: allUsers } = useGetAllUsers();
 
   if (!allUsers) {
     return null;

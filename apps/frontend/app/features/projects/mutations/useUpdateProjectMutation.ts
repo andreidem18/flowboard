@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import env from "~/lib/env";
 import { queryClient } from "~/providers/ReactQueryClientProvider";
-import { getAllProjectsQueryOptions } from "../queries";
+import { PROJECTS_QUERY_KEY } from "../queries";
 import type { UpdateProjectBody, Project } from "@repo/shared";
 
 interface Params {
@@ -36,7 +36,7 @@ export const useUpdateProjectMutation = ({ onSuccess }: Params = {}) => {
     },
     onSuccess: () => {
       // Invalidate the query to ensure fresh data
-      queryClient.invalidateQueries(getAllProjectsQueryOptions());
+      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
       toast.success("Project updated successfully");
       onSuccess?.();
     },

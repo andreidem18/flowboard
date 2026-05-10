@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import env from "~/lib/env";
 import { queryClient } from "~/providers/ReactQueryClientProvider";
-import { getTasksByProjectIdQueryOptions } from "../queries";
+import { TASKS_QUERY_KEY } from "../queries";
 import type { GetAllTasks, Task, TaskStatus } from "@repo/shared";
 
 interface Params {
@@ -30,19 +30,21 @@ export const useDeleteTaskMutation = ({
     },
     onMutate: async (taskId: number) => {
       // Cancel any outgoing refetches so they don't overwrite optimistic update
-      await queryClient.cancelQueries(
-        getTasksByProjectIdQueryOptions({ projectId, status })
-      );
+      await queryClient.cancelQueries({
+        queryKey: [TASKS_QUERY_KEY, projectId, status],
+      });
 
       // Snapshot the previous value
-      const previousTasks = queryClient.getQueryData<GetAllTasks>(
-        getTasksByProjectIdQueryOptions({ projectId, status }).queryKey
-      );
+      const previousTasks = queryClient.getQueryData<GetAllTasks>([
+        TASKS_QUERY_KEY,
+        projectId,
+        status,
+      ]);
 
       // Optimistically update to the new value
       if (previousTasks) {
         queryClient.setQueryData<GetAllTasks>(
-          getTasksByProjectIdQueryOptions({ projectId, status }).queryKey,
+          [TASKS_QUERY_KEY, projectId, status],
           previousTasks.filter((task: Task) => task.id !== taskId)
         );
       }
@@ -54,7 +56,7 @@ export const useDeleteTaskMutation = ({
       // If the mutation fails, use the context returned from onMutate to rollback
       if (context?.previousTasks) {
         queryClient.setQueryData(
-          getTasksByProjectIdQueryOptions({ projectId, status }).queryKey,
+          [TASKS_QUERY_KEY, projectId, status],
           context.previousTasks
         );
       }
@@ -62,9 +64,9 @@ export const useDeleteTaskMutation = ({
     },
     onSuccess: () => {
       // Invalidate the query to ensure fresh data
-      queryClient.invalidateQueries(
-        getTasksByProjectIdQueryOptions({ projectId, status })
-      );
+      queryClient.invalidateQueries({
+        queryKey: [TASKS_QUERY_KEY, projectId, status],
+      });
       toast.success("Task deleted successfully");
       onSuccess?.();
     },

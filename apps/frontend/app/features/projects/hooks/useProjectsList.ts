@@ -1,10 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllProjectsQueryOptions } from "../queries";
+import { useGetAllProjects } from "../queries";
 import { useDeleteProjectMutation } from "../mutations";
 import { useProjectsStore } from "../stores/useProjectsStore";
 
 export const useProjectsList = () => {
-  const { data: projects, isLoading } = useQuery(getAllProjectsQueryOptions());
+  const { data: projects, isLoading } = useGetAllProjects();
   const { mutateAsync: deleteProject } = useDeleteProjectMutation();
 
   const {

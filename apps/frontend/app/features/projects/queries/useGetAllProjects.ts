@@ -1,10 +1,12 @@
 import type { GetAllProjects } from "@repo/shared";
-import { queryOptions } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import env from "~/lib/env";
 
-export const getAllProjectsQueryOptions = () => {
-  return queryOptions({
-    queryKey: ["allProjects"],
+export const PROJECTS_QUERY_KEY = "allProjects";
+
+export const useGetAllProjects = () => {
+  return useQuery({
+    queryKey: [PROJECTS_QUERY_KEY],
     queryFn: async () => {
       const res = await fetch(env.VITE_API_URL + "/projects", {
         credentials: "include",

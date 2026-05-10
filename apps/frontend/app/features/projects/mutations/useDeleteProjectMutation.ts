@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import env from "~/lib/env";
 import { queryClient } from "~/providers/ReactQueryClientProvider";
-import { getAllProjectsQueryOptions } from "../queries";
+import { PROJECTS_QUERY_KEY } from "../queries";
 import type { GetAllProjects, Project } from "@repo/shared";
 
 interface Params {
@@ -24,17 +24,17 @@ export const useDeleteProjectMutation = ({ onSuccess }: Params = {}) => {
     },
     onMutate: async (projectId: number) => {
       // Cancel any outgoing refetches so they don't overwrite optimistic update
-      await queryClient.cancelQueries(getAllProjectsQueryOptions());
+      await queryClient.cancelQueries({ queryKey: [PROJECTS_QUERY_KEY] });
 
       // Snapshot the previous value
-      const previousProjects = queryClient.getQueryData<GetAllProjects>(
-        getAllProjectsQueryOptions().queryKey
-      );
+      const previousProjects = queryClient.getQueryData<GetAllProjects>([
+        PROJECTS_QUERY_KEY,
+      ]);
 
       // Optimistically update to the new value
       if (previousProjects) {
         queryClient.setQueryData<GetAllProjects>(
-          getAllProjectsQueryOptions().queryKey,
+          [PROJECTS_QUERY_KEY],
           previousProjects.filter(
             (project: Project) => project.id !== projectId
           )
@@ -48,14 +48,14 @@ export const useDeleteProjectMutation = ({ onSuccess }: Params = {}) => {
       // If the mutation fails, use the context returned from onMutate to rollback
       if (context?.previousProjects) {
         queryClient.setQueryData(
-          getAllProjectsQueryOptions().queryKey,
+          [PROJECTS_QUERY_KEY],
           context.previousProjects
         );
       }
     },
     onSuccess: () => {
       // Invalidate the query to ensure fresh data
-      queryClient.invalidateQueries(getAllProjectsQueryOptions());
+      queryClient.invalidateQueries({ queryKey: [PROJECTS_QUERY_KEY] });
       toast.success("Project deleted successfully");
       onSuccess?.();
     },

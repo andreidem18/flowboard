@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import {
   Select,
@@ -7,10 +6,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { getAllProjectsQueryOptions } from "~/features/projects/queries";
+import { useGetAllProjects } from "~/features/projects/queries";
 
 export const BoardHeader = () => {
-  const { data: projects = [] } = useQuery(getAllProjectsQueryOptions());
+  const { data: projects = [] } = useGetAllProjects();
   const navigate = useNavigate();
   const { projectId } = useParams();
 

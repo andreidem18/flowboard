@@ -1,1 +1,1 @@
-export { getAllProjectsQueryOptions } from "./getAllProjectsQueryOptions";
+export { useGetAllProjects, PROJECTS_QUERY_KEY } from "./useGetAllProjects";

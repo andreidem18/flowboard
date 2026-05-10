@@ -1,12 +1,12 @@
 import type { GetAllUsers, GetAllUsersQuery } from "@repo/shared";
-import { queryOptions } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import env from "~/lib/env";
 
-export const getAllUsersQueryOptions = ({
-  name,
-}: GetAllUsersQuery | undefined = {}) => {
-  return queryOptions({
-    queryKey: ["tasks", name],
+export const USERS_QUERY_KEY = "users";
+
+export const useGetAllUsers = ({ name }: GetAllUsersQuery | undefined = {}) => {
+  return useQuery({
+    queryKey: [USERS_QUERY_KEY, name],
     queryFn: async () => {
       const url = new URL(`${env.VITE_API_URL}/user`);
 

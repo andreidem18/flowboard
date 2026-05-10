@@ -1,7 +1,6 @@
 import type { GetTasksQuery, TaskStatus } from "@repo/shared";
-import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
-import { getTasksByProjectIdQueryOptions } from "../queries/getTasksByProjectIdQueryOptions";
+import { useGetTasksByProjectId } from "../queries";
 import { Button } from "~/components/ui/button";
 import { Plus } from "lucide-react";
 import { TaskCard } from "./TaskCard";
@@ -21,7 +20,7 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
 
   const setSelectedStatus = useBoardStore((s) => s.setSelectedStatus);
 
-  const { data: tasks } = useQuery(getTasksByProjectIdQueryOptions(filters));
+  const { data: tasks } = useGetTasksByProjectId(filters);
 
   if (!tasks) return <></>;
 

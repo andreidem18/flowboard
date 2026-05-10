@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import env from "~/lib/env";
 import { queryClient } from "~/providers/ReactQueryClientProvider";
-import { TASK_QUERY_KEY } from "../queries";
+import { TASKS_QUERY_KEY } from "../queries";
 import type { CreateTaskBody, Task } from "@repo/shared";
 
 interface Params {
@@ -30,7 +30,7 @@ export const useCreateTaskMutation = ({ projectId, onSuccess }: Params) => {
     },
     onSuccess: () => {
       // Invalidate the queries to ensure fresh data
-      queryClient.invalidateQueries({ queryKey: [TASK_QUERY_KEY, projectId] });
+      queryClient.invalidateQueries({ queryKey: [TASKS_QUERY_KEY, projectId] });
       toast.success("Task created successfully");
       onSuccess?.();
     },

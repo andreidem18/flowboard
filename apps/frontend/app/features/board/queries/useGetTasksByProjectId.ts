@@ -1,16 +1,16 @@
 import type { GetAllTasks, GetTasksQuery } from "@repo/shared";
-import { queryOptions } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import env from "~/lib/env";
 
-export const TASK_QUERY_KEY = "tasks";
+export const TASKS_QUERY_KEY = "tasks";
 
-export const getTasksByProjectIdQueryOptions = ({
+export const useGetTasksByProjectId = ({
   projectId,
   status,
   userId,
 }: GetTasksQuery) => {
-  return queryOptions({
-    queryKey: [TASK_QUERY_KEY, projectId, status, userId],
+  return useQuery({
+    queryKey: [TASKS_QUERY_KEY, projectId, status, userId],
     queryFn: async () => {
       const url = new URL(`${env.VITE_API_URL}/tasks`);
 

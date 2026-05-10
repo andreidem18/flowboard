@@ -1,12 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
 import { Link, Navigate } from "react-router";
 import { FolderPlus } from "lucide-react";
-import { getAllProjectsQueryOptions } from "~/features/projects/queries";
+import { useGetAllProjects } from "~/features/projects/queries";
 
 export default function BoardPage() {
-  const { data: projects = [], isLoading } = useQuery(
-    getAllProjectsQueryOptions()
-  );
+  const { data: projects = [], isLoading } = useGetAllProjects();
 
   if (isLoading) {
     return <div>Loading projects...</div>;
