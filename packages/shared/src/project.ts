@@ -17,7 +17,10 @@ export const createProjectBodySchema = z.object({
 
 export const updateProjectBodySchema = createProjectBodySchema.partial();
 
+export const simpleProjectSchema = projectSchema.pick({ id: true, name: true });
+
 export type Project = z.infer<typeof projectSchema>;
 export type GetAllProjects = z.infer<typeof getAllProjectsSchema>;
 export type CreateProjectBody = z.infer<typeof createProjectBodySchema>;
 export type UpdateProjectBody = z.infer<typeof updateProjectBodySchema>;
+export type SimpleProject = z.infer<typeof simpleProjectSchema>;

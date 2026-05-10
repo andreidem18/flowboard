@@ -1,6 +1,7 @@
 import Elysia from "elysia";
 import {
   createTaskBodySchema,
+  dashboardSchema,
   deleteResSchema,
   getAllTasksSchema,
   getTasksQuerySchema,
@@ -11,24 +12,6 @@ import { numericIdParamSchema } from "@/common/schemas";
 import { Tags } from "@/constants";
 import { betterAuth } from "@/middlewares";
 import { taskService } from "./task.service";
-import type {
-  Task as PrismaTask,
-  Project as PrismaProject,
-  User as PrismaUser,
-} from "../../../generated/prisma/client";
-
-type TaskWithProject = PrismaTask & {
-  project: Pick<PrismaProject, "name" | "color">;
-  user: Pick<PrismaUser, "name">;
-};
-
-const mapTask = (task: TaskWithProject) => ({
-  ...task,
-  createdAt: task.createdAt.toISOString(),
-  updatedAt: task.updatedAt.toISOString(),
-  deadline: task.deadline?.toISOString() ?? null,
-  finishedAt: task.finishedAt?.toISOString() ?? null,
-});
 
 export const taskRoutes = new Elysia({
   prefix: "/tasks",
@@ -38,8 +21,7 @@ export const taskRoutes = new Elysia({
 taskRoutes.get(
   "/",
   async ({ query }) => {
-    const tasks = await taskService.getAll(query);
-    return tasks.map(mapTask);
+    return taskService.getAll(query);
   },
   {
     query: getTasksQuerySchema,
@@ -51,8 +33,7 @@ taskRoutes.get(
 taskRoutes.get(
   "/:id",
   async ({ params: { id }, status }) => {
-    const task = await taskService.getOne(id);
-    return status(200, mapTask(task));
+    return status(200, await taskService.getOne(id));
   },
   {
     params: numericIdParamSchema,
@@ -64,8 +45,7 @@ taskRoutes.get(
 taskRoutes.post(
   "/",
   async ({ body, status }) => {
-    const task = await taskService.create(body);
-    return status(201, mapTask(task));
+    return status(201, await taskService.create(body));
   },
   {
     body: createTaskBodySchema,
@@ -77,8 +57,7 @@ taskRoutes.post(
 taskRoutes.patch(
   "/:id",
   async ({ params: { id }, body }) => {
-    const task = await taskService.update(id, body);
-    return mapTask(task);
+    return await taskService.update(id, body);
   },
   {
     params: numericIdParamSchema,
@@ -97,6 +76,17 @@ taskRoutes.delete(
   {
     params: numericIdParamSchema,
     response: { 200: deleteResSchema },
+    auth: true,
+  },
+);
+
+taskRoutes.get(
+  "/dashboard-data",
+  async () => {
+    return taskService.getDashboardData();
+  },
+  {
+    response: { 200: dashboardSchema },
     auth: true,
   },
 );

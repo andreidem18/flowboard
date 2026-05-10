@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { simpleProjectSchema } from "./project";
 
 export const taskStatusSchema = z.enum([
   "NEW",
@@ -56,6 +57,40 @@ export const getTasksQuerySchema = z.object({
   status: taskStatusSchema.optional(),
 });
 
+// Dashboard
+
+export const tasksCountSchema = z.object({
+  totalTasks: z.number(),
+  newTasks: z.number(),
+  inProgressTasks: z.number(),
+  stoppedTasks: z.number(),
+  completedTasks: z.number(),
+  overdueTasks: z.number(),
+  lowTasks: z.number(),
+  mediumTasks: z.number(),
+  highTasks: z.number(),
+});
+
+export const tasksByProjectSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  totalTasks: z.number(),
+  finishedTasks: z.number(),
+  inProgressTasks: z.number(),
+});
+
+export const upcomingTasksSchema = z.object({
+  name: z.string(),
+  deadline: z.string().optional(),
+  project: simpleProjectSchema,
+});
+
+export const dashboardSchema = z.object({
+  taskCount: tasksCountSchema,
+  tasksByProject: z.array(tasksByProjectSchema),
+  upcomingTasks: z.array(upcomingTasksSchema),
+});
+
 export type Task = z.infer<typeof taskSchema>;
 export type TaskStatus = z.infer<typeof taskStatusSchema>;
 export type TaskPriority = z.infer<typeof taskPrioritySchema>;
@@ -63,3 +98,9 @@ export type GetAllTasks = z.infer<typeof getAllTasksSchema>;
 export type CreateTaskBody = z.infer<typeof createTaskBodySchema>;
 export type UpdateTaskBody = z.infer<typeof updateTaskBodySchema>;
 export type GetTasksQuery = z.infer<typeof getTasksQuerySchema>;
+
+// Dashboard
+export type TasksCount = z.infer<typeof tasksCountSchema>;
+export type TasksByProject = z.infer<typeof tasksByProjectSchema>;
+export type UpcomingTasks = z.infer<typeof upcomingTasksSchema>;
+export type Dashboard = z.infer<typeof dashboardSchema>;
