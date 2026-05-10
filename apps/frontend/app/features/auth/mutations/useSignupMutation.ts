@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query"
-import { type SignupBody, type SignupRes } from "@repo/shared"
-import env from "~/lib/env"
+import { useMutation } from "@tanstack/react-query";
+import { type SignupBody, type SignupRes } from "@repo/shared";
+import env from "~/lib/env";
 
 export const useSignupMutation = () => {
   return useMutation({
@@ -11,12 +11,12 @@ export const useSignupMutation = () => {
         headers: {
           "Content-Type": "application/json",
         },
-      })
+      });
       if (!res.ok) {
-        throw await res.json()
+        throw await res.json();
       }
-      const data = (await res.json()) as SignupRes
-      return data
+      const data = (await res.json()) as SignupRes;
+      return data;
     },
-  })
-}
+  });
+};

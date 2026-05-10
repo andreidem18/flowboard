@@ -1,8 +1,8 @@
-import { useMutation } from "@tanstack/react-query"
-import { type LoginBody, type LoginRes } from "@repo/shared"
-import env from "~/lib/env"
-import { queryClient } from "~/providers/ReactQueryClientProvider"
-import { getSessionQueryOptions } from "../hooks"
+import { useMutation } from "@tanstack/react-query";
+import { type LoginBody, type LoginRes } from "@repo/shared";
+import env from "~/lib/env";
+import { queryClient } from "~/providers/ReactQueryClientProvider";
+import { getSessionQueryOptions } from "../hooks";
 
 export const useLoginMutation = () => {
   return useMutation({
@@ -14,13 +14,13 @@ export const useLoginMutation = () => {
         headers: {
           "Content-Type": "application/json",
         },
-      })
-      if (!res.ok) throw await res.json()
-      const data = (await res.json()) as LoginRes
-      return data
+      });
+      if (!res.ok) throw await res.json();
+      const data = (await res.json()) as LoginRes;
+      return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(getSessionQueryOptions())
+      queryClient.invalidateQueries(getSessionQueryOptions());
     },
-  })
-}
+  });
+};

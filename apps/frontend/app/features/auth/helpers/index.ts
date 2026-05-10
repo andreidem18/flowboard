@@ -1,1 +1,1 @@
-export { checkAuthError } from "./checkAuthError"
+export { checkAuthError } from "./checkAuthError";

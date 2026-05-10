@@ -1,10 +1,10 @@
-import { useMutation } from "@tanstack/react-query"
-import env from "~/lib/env"
-import { queryClient } from "~/providers/ReactQueryClientProvider"
-import { getSessionQueryOptions } from "../hooks"
+import { useMutation } from "@tanstack/react-query";
+import env from "~/lib/env";
+import { queryClient } from "~/providers/ReactQueryClientProvider";
+import { getSessionQueryOptions } from "../hooks";
 
 interface Params {
-  onSuccess?: () => void
+  onSuccess?: () => void;
 }
 
 export const useLogoutMutation = ({ onSuccess }: Params = {}) => {
@@ -17,13 +17,13 @@ export const useLogoutMutation = ({ onSuccess }: Params = {}) => {
         headers: {
           "Content-Type": "application/json",
         },
-      })
-      if (!res.ok) throw await res.json()
+      });
+      if (!res.ok) throw await res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(getSessionQueryOptions())
-      queryClient.setQueryData(getSessionQueryOptions().queryKey, null)
-      onSuccess?.()
+      queryClient.invalidateQueries(getSessionQueryOptions());
+      queryClient.setQueryData(getSessionQueryOptions().queryKey, null);
+      onSuccess?.();
     },
-  })
-}
+  });
+};

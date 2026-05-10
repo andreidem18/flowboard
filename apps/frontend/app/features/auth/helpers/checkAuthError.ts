@@ -1,11 +1,11 @@
 type ApiErrorCode =
   | "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
-  | "INVALID_EMAIL_OR_PASSWORD"
+  | "INVALID_EMAIL_OR_PASSWORD";
 
 type ApiError = {
-  code?: ApiErrorCode
-  message?: string
-}
+  code?: ApiErrorCode;
+  message?: string;
+};
 
 export function checkAuthError(
   error: unknown,
@@ -16,5 +16,5 @@ export function checkAuthError(
     error !== null &&
     "code" in error &&
     error.code === code
-  )
+  );
 }

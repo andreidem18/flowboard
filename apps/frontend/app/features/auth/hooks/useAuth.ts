@@ -1,6 +1,6 @@
-import type { GetLoggedUser } from "@repo/shared"
-import { queryOptions, useQuery } from "@tanstack/react-query"
-import env from "~/lib/env"
+import type { GetLoggedUser } from "@repo/shared";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import env from "~/lib/env";
 
 export const getSessionQueryOptions = () => {
   return queryOptions({
@@ -8,24 +8,24 @@ export const getSessionQueryOptions = () => {
     queryFn: async () => {
       const res = await fetch(env.VITE_API_URL + "/api/v1/auth/get-session", {
         credentials: "include",
-      })
+      });
 
       if (!res.ok) {
-        throw new Error("Not authenticated")
+        throw new Error("Not authenticated");
       }
-      const data = await res.json()
+      const data = await res.json();
 
-      return data as GetLoggedUser | null
+      return data as GetLoggedUser | null;
     },
     retry: false,
     staleTime: 1000 * 60 * 5,
-  })
-}
+  });
+};
 
 export function useAuth() {
   const { data, isLoading, isError, refetch } = useQuery(
     getSessionQueryOptions()
-  )
+  );
 
   return {
     user: data?.user ?? null,
@@ -33,5 +33,5 @@ export function useAuth() {
     loading: isLoading,
     isAuthenticated: !isError && !!data?.session,
     refresh: refetch,
-  }
+  };
 }

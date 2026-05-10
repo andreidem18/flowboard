@@ -1,18 +1,18 @@
-import { Navigate } from "react-router"
+import { Navigate } from "react-router";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { LoginForm, SignUpForm } from "~/features/auth/components"
-import { useAuth } from "~/features/auth/hooks"
+} from "~/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { LoginForm, SignUpForm } from "~/features/auth/components";
+import { useAuth } from "~/features/auth/hooks";
 
 export default function AuthPage() {
-  const { isAuthenticated } = useAuth()
-  if (isAuthenticated) return <Navigate to="/" />
+  const { isAuthenticated } = useAuth();
+  if (isAuthenticated) return <Navigate to="/" />;
 
   return (
     <div className="flex size-full min-h-dvh items-center justify-center">
@@ -41,5 +41,5 @@ export default function AuthPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

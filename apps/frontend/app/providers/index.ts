@@ -1,2 +1,2 @@
-export { ThemeProvider } from "./ThemeProvider"
-export { ReactQueryClientProvider } from "./ReactQueryClientProvider"
+export { ThemeProvider } from "./ThemeProvider";
+export { ReactQueryClientProvider } from "./ReactQueryClientProvider";

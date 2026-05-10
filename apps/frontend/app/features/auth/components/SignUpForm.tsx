@@ -1,12 +1,12 @@
-import { Button } from "~/components/ui/button"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
-import { Spinner } from "~/components/ui/spinner"
-import { useSignUpForm } from "../hooks/useSignUpForm"
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { Spinner } from "~/components/ui/spinner";
+import { useSignUpForm } from "../hooks/useSignUpForm";
 
 export const SignUpForm = () => {
   const { register, handleSubmit, errors, isSubmitting, onSubmit } =
-    useSignUpForm()
+    useSignUpForm();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -54,5 +54,5 @@ export const SignUpForm = () => {
         {isSubmitting ? "Creating account..." : "Sign Up"}
       </Button>
     </form>
-  )
-}
+  );
+};

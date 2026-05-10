@@ -130,7 +130,7 @@
   }
 
   body {
-    @apply bg-linear-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-foreground;
+    @apply bg-linear-to-br from-blue-50 via-purple-50 to-pink-50 text-foreground dark:from-slate-950 dark:via-slate-900 dark:to-slate-950;
   }
 
   /**
