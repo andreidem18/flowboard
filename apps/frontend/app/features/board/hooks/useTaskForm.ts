@@ -5,16 +5,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useBoardStore } from "../stores/useBoardStore";
 import { format } from "date-fns";
 import type { Task, TaskStatus } from "@repo/shared";
-import { useQuery } from "@tanstack/react-query";
-import { getAllUsersQueryOptions } from "~/features/users/queries";
+import { useAuth } from "~/features/auth/hooks";
 
 export const useTaskForm = () => {
   const { selectedTask, selectedStatus } = useBoardStore();
 
-  const { data: allUsers } = useQuery(getAllUsersQueryOptions());
+  const { user } = useAuth();
 
   const defaultValues = useMemo(
-    () => getDefaultValues(selectedTask, selectedStatus),
+    () =>
+      getDefaultValues({
+        selectedTask,
+        selectedStatus,
+        defaultUserId: user?.id,
+      }),
     [selectedTask, selectedStatus]
   );
 
@@ -44,14 +48,20 @@ export const useTaskForm = () => {
     errors,
     isSubmitting,
     onSubmit,
-    allUsers,
   };
 };
 
-const getDefaultValues = (
-  selectedTask: Task | null,
-  selectedStatus: TaskStatus | null
-): TaskFormData => {
+interface GetDefaultValuesParams {
+  selectedTask: Task | null;
+  selectedStatus: TaskStatus | null;
+  defaultUserId: string | undefined;
+}
+
+const getDefaultValues = ({
+  defaultUserId,
+  selectedStatus,
+  selectedTask,
+}: GetDefaultValuesParams): TaskFormData => {
   if (selectedTask) {
     return {
       name: selectedTask.name,
@@ -61,6 +71,7 @@ const getDefaultValues = (
       deadline: selectedTask.deadline
         ? format(new Date(selectedTask.deadline), "yyyy-MM-dd")
         : "",
+      userId: selectedTask.userId,
     };
   }
 
@@ -70,5 +81,6 @@ const getDefaultValues = (
     status: selectedStatus || "NEW",
     priority: "MEDIUM",
     deadline: "",
+    userId: defaultUserId,
   };
 };

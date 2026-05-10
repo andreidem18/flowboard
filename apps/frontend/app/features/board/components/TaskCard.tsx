@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { DeleteConfirmDialog } from "~/components/ui/delete-confirm-dialog";
 import { useTaskCard } from "../hooks";
 import { UserAvatar } from "./UserAvatar";
+import { PRIORITY_COLORS } from "../constants";
 
 interface Props {
   task: Task;
@@ -62,7 +63,7 @@ export const TaskCard = ({ task, projectId }: Props) => {
           <div className="flex items-end justify-between">
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
-                <Badge className={`text-xs ${priorityColors[task.priority]}`}>
+                <Badge className={`text-xs ${PRIORITY_COLORS[task.priority]}`}>
                   {task.priority}
                 </Badge>
                 {/* TODO: fetch color from backend */}
@@ -103,11 +104,4 @@ export const TaskCard = ({ task, projectId }: Props) => {
       />
     </>
   );
-};
-
-const priorityColors = {
-  LOW: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300",
-  MEDIUM: "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300",
-  HIGH: "bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300",
-  URGENT: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300",
 };

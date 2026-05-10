@@ -15,7 +15,7 @@ interface BoardStore {
 
 export const useBoardStore = create<BoardStore>()(
   devtools(
-    (set) => ({
+    (set, get) => ({
       selectedTask: null,
       selectedStatus: null,
       isDialogOpen: false,
@@ -23,7 +23,13 @@ export const useBoardStore = create<BoardStore>()(
       setSelectedTask: (task) =>
         set({ selectedTask: task, isDialogOpen: true }),
 
-      setDialogOpen: (open) => set({ isDialogOpen: open }),
+      setDialogOpen: (isOpen) => {
+        if (!isOpen) {
+          get().resetFormState();
+          return;
+        }
+        set({ isDialogOpen: isOpen });
+      },
 
       setSelectedStatus: (status) =>
         set({ selectedStatus: status, isDialogOpen: true }),

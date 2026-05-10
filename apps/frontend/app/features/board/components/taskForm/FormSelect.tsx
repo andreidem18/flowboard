@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Controller, type Control, type FieldErrors } from "react-hook-form";
-import type { TaskFormData } from "../schemas/tasks.schema";
+import type { TaskFormData } from "../../schemas/tasks.schema";
 
 interface FormSelectProps {
   name: keyof TaskFormData;
