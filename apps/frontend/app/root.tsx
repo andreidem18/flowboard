@@ -15,6 +15,16 @@ import { ThemeProvider } from "./providers/ThemeProvider";
 import { Toaster } from "~/components/ui/sonner";
 import { ReactQueryClientProvider } from "./providers";
 
+export function meta() {
+  return [
+    { title: "FlowBoard" },
+    {
+      name: "description",
+      content: "App to manage tasks in projects",
+    },
+  ];
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
