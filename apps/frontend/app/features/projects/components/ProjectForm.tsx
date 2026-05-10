@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Controller } from "react-hook-form";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import type { Project } from "@repo/shared";
+import { useProjectForm } from "../hooks/useProjectForm";
 
 interface Props {
   open: boolean;
@@ -33,25 +34,11 @@ const colorOptions = [
 ];
 
 export function ProjectForm({ open, onOpenChange, project }: Props) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [color, setColor] = useState(colorOptions[0]);
-
-  useEffect(() => {
-    if (project) {
-      setName(project.name);
-      setDescription(project.description || "");
-      setColor(project.color || colorOptions[0]);
-    } else {
-      setName("");
-      setDescription("");
-      setColor(colorOptions[0]);
-    }
-  }, [project, open]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
+  const { register, control, handleSubmit, errors, isSubmitting, onSubmit } =
+    useProjectForm({
+      project,
+      onSuccess: () => onOpenChange(false),
+    });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -66,45 +53,58 @@ export function ProjectForm({ open, onOpenChange, project }: Props) {
               : "Add a new project to your workspace"}
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
                 placeholder="Project name"
-                required
+                {...register("name")}
+                aria-invalid={!!errors.name}
               />
+              {errors.name && (
+                <p className="text-sm text-red-500">{errors.name.message}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
                 placeholder="Project description (optional)"
                 rows={3}
+                {...register("description")}
+                aria-invalid={!!errors.description}
               />
+              {errors.description && (
+                <p className="text-sm text-red-500">
+                  {errors.description.message}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label>Color</Label>
-              <div className="flex gap-2">
-                {colorOptions.map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    className={`h-8 w-8 rounded-full transition-transform ${
-                      color === c
-                        ? "scale-110 ring-2 ring-slate-400 ring-offset-2"
-                        : ""
-                    }`}
-                    style={{ backgroundColor: c }}
-                    onClick={() => setColor(c)}
-                  />
-                ))}
-              </div>
+              <Controller
+                name="color"
+                control={control}
+                render={({ field }) => (
+                  <div className="flex gap-2">
+                    {colorOptions.map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        className={`h-8 w-8 rounded-full transition-transform ${
+                          field.value === c
+                            ? "scale-110 ring-2 ring-slate-400 ring-offset-2"
+                            : ""
+                        }`}
+                        style={{ backgroundColor: c }}
+                        onClick={() => field.onChange(c)}
+                      />
+                    ))}
+                  </div>
+                )}
+              />
             </div>
           </div>
           <DialogFooter>
@@ -112,10 +112,13 @@ export function ProjectForm({ open, onOpenChange, project }: Props) {
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
-            <Button type="submit">{project ? "Update" : "Create"}</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : project ? "Update" : "Create"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
