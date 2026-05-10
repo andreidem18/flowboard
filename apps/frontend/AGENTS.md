@@ -30,6 +30,7 @@ The frontend consumes the backend REST API and should maintain strong type safet
 - Prefer explicit typing instead of `any`.
 - Reuse schemas/types from `@repo/shared` whenever possible.
 - Avoid duplicating backend DTO types in the frontend.
+- Use `cn` utility to concat css classes.
 
 ---
 

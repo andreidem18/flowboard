@@ -1,3 +1,5 @@
+import { DashboardOverview } from "~/features/dashboard/components";
+
 export default function DashboardPage() {
   return (
     <div className="space-y-6 p-6">
@@ -9,6 +11,7 @@ export default function DashboardPage() {
           Overview of your tasks and projects
         </p>
       </div>
+      <DashboardOverview />
     </div>
   );
 }
