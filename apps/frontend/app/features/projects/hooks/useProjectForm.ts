@@ -5,7 +5,10 @@ import {
   type ProjectFormData,
 } from "../schemas/projects.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCreateProjectMutation } from "../mutations";
+import {
+  useCreateProjectMutation,
+  useUpdateProjectMutation,
+} from "../mutations";
 import { useProjectsStore } from "../stores/useProjectsStore";
 
 interface Props {
@@ -45,10 +48,20 @@ export const useProjectForm = ({ onSuccess }: Props) => {
     },
   });
 
+  const { mutateAsync: updateProject } = useUpdateProjectMutation({
+    onSuccess: () => {
+      resetFormState();
+      onSuccess?.();
+    },
+  });
+
   const onSubmit = async (data: ProjectFormData) => {
     if (selectedProject) {
-      // TODO: Conectar con mutación de actualizar proyecto
-      throw new Error("Update not implemented yet");
+      await updateProject({
+        id: selectedProject.id,
+        body: data,
+      });
+      return;
     }
 
     await createProject(data);
