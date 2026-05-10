@@ -25,6 +25,17 @@ vi.mock("@/lib/prisma", () => ({
   },
 }));
 
+const include = {
+  include: {
+    project: {
+      select: {
+        color: true,
+        name: true,
+      },
+    },
+  },
+};
+
 describe("TaskRepository", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -37,7 +48,10 @@ describe("TaskRepository", () => {
       const result = await taskRepository.getAll({});
 
       expect(result).toEqual(mockTasksWithDates);
-      expect(prisma.task.findMany).toHaveBeenCalledWith({ where: {} });
+      expect(prisma.task.findMany).toHaveBeenCalledWith({
+        where: {},
+        ...include,
+      });
     });
 
     it("should return tasks filtered by projectId", async () => {
@@ -50,6 +64,7 @@ describe("TaskRepository", () => {
       expect(result).toEqual(filteredTasks);
       expect(prisma.task.findMany).toHaveBeenCalledWith({
         where: { projectId },
+        ...include,
       });
     });
 
@@ -63,6 +78,7 @@ describe("TaskRepository", () => {
       expect(result).toEqual(filteredTasks);
       expect(prisma.task.findMany).toHaveBeenCalledWith({
         where: { userId },
+        ...include,
       });
     });
 
@@ -77,6 +93,7 @@ describe("TaskRepository", () => {
       expect(result).toEqual(filteredTasks);
       expect(prisma.task.findMany).toHaveBeenCalledWith({
         where: { projectId, userId },
+        ...include,
       });
     });
 
@@ -99,7 +116,10 @@ describe("TaskRepository", () => {
       const result = await taskRepository.create(createBody);
 
       expect(result).toEqual(mockNewTaskWithDates);
-      expect(prisma.task.create).toHaveBeenCalledWith({ data: createBody });
+      expect(prisma.task.create).toHaveBeenCalledWith({
+        data: createBody,
+        ...include,
+      });
     });
   });
 
@@ -112,6 +132,7 @@ describe("TaskRepository", () => {
       expect(result).toEqual(mockTaskWithDates);
       expect(prisma.task.findUnique).toHaveBeenCalledWith({
         where: { id: 1 },
+        ...include,
       });
     });
 
@@ -121,6 +142,7 @@ describe("TaskRepository", () => {
       await expect(taskRepository.getOne(999)).rejects.toThrow(NotFoundError);
       expect(prisma.task.findUnique).toHaveBeenCalledWith({
         where: { id: 999 },
+        ...include,
       });
     });
   });
@@ -152,6 +174,14 @@ describe("TaskRepository", () => {
       expect(prisma.task.update).toHaveBeenCalledWith({
         data: updateBody,
         where: { id: taskId },
+        include: {
+          project: {
+            select: {
+              color: true,
+              name: true,
+            },
+          },
+        },
       });
     });
   });
