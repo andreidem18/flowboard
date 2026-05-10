@@ -2,11 +2,11 @@ import type { GetTasksQuery, TaskStatus } from "@repo/shared";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
 import { getTasksByProjectIdQueryOptions } from "../queries/getTasksByProjectIdQueryOptions";
-import { useParams } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Plus } from "lucide-react";
 import { TaskCard } from "./TaskCard";
 import { useBoardStore } from "../stores/useBoardStore";
+import { useProjectIdParam } from "../hooks";
 
 interface TaskColumnProps {
   status: TaskStatus;
@@ -14,12 +14,10 @@ interface TaskColumnProps {
 }
 
 export const TaskColumn = ({ status, label }: TaskColumnProps) => {
-  const { projectId } = useParams();
+  const projectId = useProjectIdParam();
 
   const filters: GetTasksQuery = { status };
-  if (projectId !== "all" && !isNaN(Number(projectId))) {
-    filters.projectId = Number(projectId);
-  }
+  if (projectId) filters.projectId = projectId;
 
   const setSelectedStatus = useBoardStore((s) => s.setSelectedStatus);
 
