@@ -25,6 +25,9 @@ export const taskSchema = z.object({
     name: z.string(),
     color: z.string().nullable(),
   }),
+  user: z.object({
+    name: z.string(),
+  }),
 });
 
 export const getAllTasksSchema = z.array(taskSchema);

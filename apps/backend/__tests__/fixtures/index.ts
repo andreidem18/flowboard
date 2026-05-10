@@ -28,6 +28,11 @@ const TASK_PROJECT_MAP: Record<number, Task["project"]> = {
   2: { name: "Mobile App", color: "#22C55E" },
   3: { name: "Backend API", color: "#A855F7" },
 };
+const TASK_USER_MAP: Record<string, Task["user"]> = {
+  "seed-user-alice": { name: "Alice" },
+  "seed-user-bob": { name: "Bob" },
+  "seed-user-carol": { name: "Carol" },
+};
 
 function toTaskWithDates(t: (typeof TASK_FIXTURES)[number]): TaskWithDates {
   return {
@@ -37,6 +42,7 @@ function toTaskWithDates(t: (typeof TASK_FIXTURES)[number]): TaskWithDates {
     createdAt: new Date(t.createdAt),
     updatedAt: new Date(t.updatedAt),
     project: TASK_PROJECT_MAP[t.projectId] ?? { name: "", color: null },
+    user: TASK_USER_MAP[t.userId] ?? { name: "" },
   };
 }
 
@@ -46,6 +52,7 @@ function toTask(t: (typeof TASK_FIXTURES)[number]): Task {
     deadline: t.deadline ?? null,
     finishedAt: t.finishedAt ?? null,
     project: TASK_PROJECT_MAP[t.projectId] ?? { name: "", color: null },
+    user: TASK_USER_MAP[t.userId] ?? { name: "" },
   };
 }
 
@@ -109,6 +116,7 @@ export const mockNewTaskWithDates: TaskWithDates = {
   projectId: 1,
   userId: "seed-user-alice",
   project: { name: "Website Redesign", color: "#3B82F6" },
+  user: { name: mockUser.name },
 };
 
 export const mockUpdatedTaskWithDates: TaskWithDates = {
@@ -124,6 +132,7 @@ export const mockUpdatedTaskWithDates: TaskWithDates = {
   projectId: 1,
   userId: "seed-user-alice",
   project: { name: "Website Redesign", color: "#3B82F6" },
+  user: { name: mockUser.name },
 };
 
 // Tasks — string dates (HTTP serialization shape, for service tests)

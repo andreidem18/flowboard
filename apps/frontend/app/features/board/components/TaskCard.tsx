@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
+import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { DeleteConfirmDialog } from "~/components/ui/delete-confirm-dialog";
 import { useTaskCard } from "../hooks";
 
@@ -23,8 +24,8 @@ export const TaskCard = ({ task, projectId }: Props) => {
 
   return (
     <>
-      <Card className={`cursor-move transition-shadow hover:shadow-md`}>
-        <CardHeader className="p-3 pb-2">
+      <Card className={`cursor-move py-2 transition-shadow hover:shadow-md`}>
+        <CardHeader className="px-3 pt-1 pb-2">
           <div className="flex items-start justify-between gap-2">
             <h4 className="text-sm font-medium">{task.name}</h4>
             <div className="flex shrink-0 gap-1">
@@ -58,30 +59,42 @@ export const TaskCard = ({ task, projectId }: Props) => {
           )}
         </CardHeader>
         <CardContent className="space-y-2 p-3 pt-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge className={`text-xs ${priorityColors[task.priority]}`}>
-              {task.priority}
-            </Badge>
-            {/* TODO: fetch color from backend */}
-            <Badge variant="outline" className="text-xs">
-              <div
-                className="mr-1 h-2 w-2 rounded-full"
-                style={{ backgroundColor: task.project.color || "#64748b" }}
-              />
-              {task.project.name}
-            </Badge>
-          </div>
-          {task.deadline && (
-            <div
-              className={`flex items-center gap-1 text-xs ${
-                isOverdue ? "text-red-600" : "text-slate-600"
-              }`}
-            >
-              {isOverdue && <AlertCircle className="h-3 w-3" />}
-              <Calendar className="h-3 w-3" />
-              <span>{format(new Date(task.deadline), "MMM d, yyyy")}</span>
+          <div className="flex items-end justify-between">
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <Badge className={`text-xs ${priorityColors[task.priority]}`}>
+                  {task.priority}
+                </Badge>
+                {/* TODO: fetch color from backend */}
+                <Badge variant="outline" className="text-xs">
+                  <div
+                    className="mr-1 h-2 w-2 rounded-full"
+                    style={{ backgroundColor: task.project.color || "#64748b" }}
+                  />
+                  {task.project.name}
+                </Badge>
+              </div>
+              {task.deadline && (
+                <div
+                  className={`flex items-center gap-1 text-xs ${
+                    isOverdue ? "text-red-600" : "text-slate-600"
+                  }`}
+                >
+                  {isOverdue && <AlertCircle className="h-3 w-3" />}
+                  <Calendar className="h-3 w-3" />
+                  <span>{format(new Date(task.deadline), "MMM d, yyyy")}</span>
+                </div>
+              )}
             </div>
-          )}
+            <div className="flex h-fit items-center gap-2 pt-1">
+              <Avatar className="h-6 w-6">
+                <AvatarFallback>
+                  {task.user.name.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="text-xs text-slate-600">{task.user.name}</span>
+            </div>
+          </div>
         </CardContent>
       </Card>
 

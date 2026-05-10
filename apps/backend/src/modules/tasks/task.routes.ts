@@ -14,10 +14,12 @@ import { taskService } from "./task.service";
 import type {
   Task as PrismaTask,
   Project as PrismaProject,
+  User as PrismaUser,
 } from "../../../generated/prisma/client";
 
 type TaskWithProject = PrismaTask & {
   project: Pick<PrismaProject, "name" | "color">;
+  user: Pick<PrismaUser, "name">;
 };
 
 const mapTask = (task: TaskWithProject) => ({
@@ -48,9 +50,9 @@ taskRoutes.get(
 
 taskRoutes.get(
   "/:id",
-  async ({ params: { id } }) => {
+  async ({ params: { id }, status }) => {
     const task = await taskService.getOne(id);
-    return mapTask(task);
+    return status(200, mapTask(task));
   },
   {
     params: numericIdParamSchema,

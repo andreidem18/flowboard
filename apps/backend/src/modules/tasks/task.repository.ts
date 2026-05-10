@@ -14,6 +14,7 @@ export const taskRepository = {
         project: {
           select: { name: true, color: true },
         },
+        user: { select: { name: true } },
       },
     });
   },
@@ -21,7 +22,10 @@ export const taskRepository = {
   async getOne(id: number) {
     const task = await prisma.task.findUnique({
       where: { id },
-      include: { project: { select: { name: true, color: true } } },
+      include: {
+        project: { select: { name: true, color: true } },
+        user: { select: { name: true } },
+      },
     });
     if (!task) throw new NotFoundError("Task not found");
     return task;
@@ -30,7 +34,12 @@ export const taskRepository = {
   create(body: CreateTaskBody) {
     return prisma.task.create({
       data: body,
-      include: { project: { select: { name: true, color: true } } },
+      include: {
+        project: {
+          select: { name: true, color: true },
+        },
+        user: { select: { name: true } },
+      },
     });
   },
 
@@ -42,7 +51,12 @@ export const taskRepository = {
     return prisma.task.update({
       data: body,
       where: { id },
-      include: { project: { select: { name: true, color: true } } },
+      include: {
+        project: {
+          select: { name: true, color: true },
+        },
+        user: { select: { name: true } },
+      },
     });
   },
 };

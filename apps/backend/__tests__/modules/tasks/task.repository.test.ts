@@ -33,6 +33,7 @@ const include = {
         name: true,
       },
     },
+    user: { select: { name: true } },
   },
 };
 
@@ -174,14 +175,7 @@ describe("TaskRepository", () => {
       expect(prisma.task.update).toHaveBeenCalledWith({
         data: updateBody,
         where: { id: taskId },
-        include: {
-          project: {
-            select: {
-              color: true,
-              name: true,
-            },
-          },
-        },
+        ...include,
       });
     });
   });
