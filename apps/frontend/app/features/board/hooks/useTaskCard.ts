@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDeleteTaskMutation } from "../mutations";
 import type { Task } from "@repo/shared";
+import { useBoardStore } from "../stores/useBoardStore";
 
 interface Props {
   task: Task;
@@ -13,6 +14,8 @@ export const useTaskCard = ({ task, projectId }: Props) => {
     projectId,
     status: task.status,
   });
+
+  const selectCard = useBoardStore((s) => s.setSelectedTask);
 
   const isOverdue =
     task.deadline &&
@@ -33,5 +36,6 @@ export const useTaskCard = ({ task, projectId }: Props) => {
     isPending,
     isOverdue,
     handleConfirmDelete,
+    selectCard,
   };
 };

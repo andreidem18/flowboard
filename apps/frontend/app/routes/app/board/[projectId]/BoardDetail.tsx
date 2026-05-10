@@ -1,11 +1,11 @@
-import { Tasks } from "~/features/board/components";
-import { BoardHeader } from "~/features/board/components/BoardHeader";
+import { BoardHeader, TaskForm, Tasks } from "~/features/board/components";
 
 export default function BoardDetail() {
   return (
-    <div>
+    <>
       <BoardHeader />
       <Tasks />
-    </div>
+      <TaskForm />
+    </>
   );
 }

@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Plus } from "lucide-react";
 import { TaskCard } from "./TaskCard";
+import { useBoardStore } from "../stores/useBoardStore";
 
 interface TaskColumnProps {
   status: TaskStatus;
@@ -19,6 +20,8 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
   if (projectId !== "all" && !isNaN(Number(projectId))) {
     filters.projectId = Number(projectId);
   }
+
+  const setSelectedStatus = useBoardStore((s) => s.setSelectedStatus);
 
   const { data: tasks } = useQuery(getTasksByProjectIdQueryOptions(filters));
 
@@ -36,7 +39,11 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
           <h3 className="font-semibold">{label}</h3>
           <p className="text-sm text-slate-600">{tasks.length} tasks</p>
         </div>
-        <Button variant="ghost" size="sm" /* onClick={onCreateTask} */>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setSelectedStatus(status)}
+        >
           <Plus className="h-4 w-4" />
         </Button>
       </div>

@@ -20,6 +20,7 @@ export const TaskCard = ({ task, projectId }: Props) => {
     isPending,
     isOverdue,
     handleConfirmDelete,
+    selectCard,
   } = useTaskCard({ task, projectId });
 
   return (
@@ -35,8 +36,7 @@ export const TaskCard = ({ task, projectId }: Props) => {
                 className="h-6 w-6 p-0"
                 onClick={(e) => {
                   e.stopPropagation();
-                  // TODO: edit task
-                  // onEdit(task);
+                  selectCard(task);
                 }}
               >
                 <Pencil className="h-3 w-3" />
