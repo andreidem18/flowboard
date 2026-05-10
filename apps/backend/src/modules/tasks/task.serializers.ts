@@ -1,4 +1,4 @@
-import { UpcomingTasks } from "@repo/shared";
+import { Task, UpcomingTasks } from "@repo/shared";
 import type {
   Task as PrismaTask,
   Project as PrismaProject,
@@ -17,12 +17,12 @@ export const serializeUpcomingTasks = (
     deadline: t.deadline?.toISOString(),
   }));
 
-type TaskWithProject = PrismaTask & {
+type TaskWithDate = PrismaTask & {
   project: Pick<PrismaProject, "name" | "color">;
   user: Pick<PrismaUser, "name">;
 };
 
-export const serializeTask = (task: TaskWithProject) => ({
+export const serializeTask = (task: TaskWithDate): Task => ({
   ...task,
   createdAt: task.createdAt.toISOString(),
   updatedAt: task.updatedAt.toISOString(),

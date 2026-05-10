@@ -3,7 +3,6 @@ import { betterAuth } from "@/middlewares";
 import { getAllUsersQuery, getAllUsersSchema } from "@repo/shared";
 import Elysia from "elysia";
 import { userService } from "./user.service";
-import { User as PrismaUser } from "generated/prisma/client";
 
 export const userRoutes = new Elysia({
   prefix: "/user",
@@ -14,7 +13,7 @@ userRoutes.get(
   "/",
   async ({ query, status }) => {
     const users = await userService.getAllUsers(query);
-    return status(200, users.map(mapUser));
+    return status(200, users);
   },
   {
     auth: true,
@@ -22,9 +21,3 @@ userRoutes.get(
     query: getAllUsersQuery,
   },
 );
-
-const mapUser = (user: PrismaUser) => ({
-  ...user,
-  createdAt: user.createdAt.toISOString(),
-  updatedAt: user.updatedAt.toISOString(),
-});

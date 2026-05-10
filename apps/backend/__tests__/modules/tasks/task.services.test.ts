@@ -9,6 +9,10 @@ import {
   mockTasksWithDates,
   mockNewTaskWithDates,
   mockUpdatedTaskWithDates,
+  mockTask,
+  mockTasks,
+  mockNewTask,
+  mockUpdatedTask,
 } from "./mockData";
 
 vi.mock("@/modules/tasks/task.repository", () => ({
@@ -32,18 +36,17 @@ describe("TaskService", () => {
 
       const result = await taskService.getAll({});
 
-      expect(result).toEqual(mockTasksWithDates);
+      expect(result).toEqual(mockTasks);
       expect(taskRepository.getAll).toHaveBeenCalledWith({});
     });
 
     it("should pass filters to repository", async () => {
       const filters = { projectId: 1, userId: "user1" };
-      const filteredTasks = [mockTaskWithDates];
-      vi.mocked(taskRepository.getAll).mockResolvedValue(filteredTasks);
+      vi.mocked(taskRepository.getAll).mockResolvedValue([mockTaskWithDates]);
 
       const result = await taskService.getAll(filters);
 
-      expect(result).toEqual(filteredTasks);
+      expect(result).toEqual([mockTask]);
       expect(taskRepository.getAll).toHaveBeenCalledWith(filters);
     });
 
@@ -62,7 +65,7 @@ describe("TaskService", () => {
 
       const result = await taskService.getOne(1);
 
-      expect(result).toEqual(mockTaskWithDates);
+      expect(result).toEqual(mockTask);
       expect(taskRepository.getOne).toHaveBeenCalledWith(1);
     });
 
@@ -83,7 +86,7 @@ describe("TaskService", () => {
 
       const result = await taskService.create(createBody);
 
-      expect(result).toEqual(mockNewTaskWithDates);
+      expect(result).toEqual(mockNewTask);
       expect(taskRepository.create).toHaveBeenCalledWith(createBody);
     });
   });
@@ -139,7 +142,7 @@ describe("TaskService", () => {
 
       const result = await taskService.update(taskId, updateBody);
 
-      expect(result).toEqual(mockUpdatedTaskWithDates);
+      expect(result).toEqual(mockUpdatedTask);
       expect(taskRepository.getOne).toHaveBeenCalledWith(taskId);
       expect(taskRepository.update).toHaveBeenCalledWith(taskId, updateBody);
     });
