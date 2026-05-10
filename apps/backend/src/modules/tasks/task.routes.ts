@@ -11,9 +11,16 @@ import { numericIdParamSchema } from "@/common/schemas";
 import { Tags } from "@/constants";
 import { betterAuth } from "@/middlewares";
 import { taskService } from "./task.service";
-import type { Task as PrismaTask } from "../../../generated/prisma/client";
+import type {
+  Task as PrismaTask,
+  Project as PrismaProject,
+} from "../../../generated/prisma/client";
 
-const mapTask = (task: PrismaTask) => ({
+type TaskWithProject = PrismaTask & {
+  project: Pick<PrismaProject, "name" | "color">;
+};
+
+const mapTask = (task: TaskWithProject) => ({
   ...task,
   createdAt: task.createdAt.toISOString(),
   updatedAt: task.updatedAt.toISOString(),

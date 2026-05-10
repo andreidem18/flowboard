@@ -8,18 +8,30 @@ export const taskRepository = {
       where: {
         ...(filters.userId ? { userId: filters.userId } : {}),
         ...(filters.projectId ? { projectId: filters.projectId } : {}),
+        ...(filters.status ? { status: filters.status } : {}),
+      },
+      include: {
+        project: {
+          select: { name: true, color: true },
+        },
       },
     });
   },
 
   async getOne(id: number) {
-    const task = await prisma.task.findUnique({ where: { id } });
+    const task = await prisma.task.findUnique({
+      where: { id },
+      include: { project: { select: { name: true, color: true } } },
+    });
     if (!task) throw new NotFoundError("Task not found");
     return task;
   },
 
   create(body: CreateTaskBody) {
-    return prisma.task.create({ data: body });
+    return prisma.task.create({
+      data: body,
+      include: { project: { select: { name: true, color: true } } },
+    });
   },
 
   async delete(id: number) {
@@ -27,6 +39,10 @@ export const taskRepository = {
   },
 
   update(id: number, body: UpdateTaskBody) {
-    return prisma.task.update({ data: body, where: { id } });
+    return prisma.task.update({
+      data: body,
+      where: { id },
+      include: { project: { select: { name: true, color: true } } },
+    });
   },
 };

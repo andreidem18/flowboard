@@ -21,6 +21,10 @@ export const taskSchema = z.object({
   updatedAt: z.string(),
   projectId: z.number().int(),
   userId: z.string(),
+  project: z.object({
+    name: z.string(),
+    color: z.string().nullable(),
+  }),
 });
 
 export const getAllTasksSchema = z.array(taskSchema);
@@ -45,6 +49,7 @@ export const updateTaskBodySchema = createTaskBodySchema
 export const getTasksQuerySchema = z.object({
   projectId: z.coerce.number().int().optional(),
   userId: z.string().optional(),
+  status: taskStatusSchema.optional(),
 });
 
 export type Task = z.infer<typeof taskSchema>;
