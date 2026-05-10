@@ -67,6 +67,11 @@ async function main() {
     });
   }
   console.log(`✓ ${TASK_FIXTURES.length} tasks seeded`);
+
+  // Reset sequences so autoincrement doesn't collide with seeded IDs
+  await prisma.$executeRaw`SELECT setval(pg_get_serial_sequence('"projects"', 'id'), (SELECT MAX(id) FROM projects))`;
+  await prisma.$executeRaw`SELECT setval(pg_get_serial_sequence('"tasks"', 'id'), (SELECT MAX(id) FROM tasks))`;
+  console.log("✓ Sequences reset");
 }
 
 main()

@@ -4,12 +4,18 @@ import { taskFormSchema, type TaskFormData } from "../schemas/tasks.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useBoardStore } from "../stores/useBoardStore";
 import { format } from "date-fns";
-import type { Task, TaskStatus } from "@repo/shared";
+import type { Task, TaskStatus, CreateTaskBody } from "@repo/shared";
 import { useAuth } from "~/features/auth/hooks";
+import { useCreateTaskMutation } from "../mutations";
+import { useProjectIdParam } from "./useProjectIdParam";
 
-export const useTaskForm = () => {
-  const { selectedTask, selectedStatus } = useBoardStore();
+interface Props {
+  onSuccess?: () => void;
+}
 
+export const useTaskForm = ({ onSuccess }: Props = {}) => {
+  const { selectedTask, selectedStatus, resetFormState } = useBoardStore();
+  const projectId = useProjectIdParam();
   const { user } = useAuth();
 
   const defaultValues = useMemo(
@@ -37,8 +43,30 @@ export const useTaskForm = () => {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
-  const onSubmit = async (/* data: TaskFormData */) => {
-    // TODO: update or create
+  const { mutateAsync: createTask } = useCreateTaskMutation({
+    projectId: projectId || 0,
+    status: selectedTask?.status || selectedStatus || undefined,
+    onSuccess: () => {
+      resetFormState();
+      onSuccess?.();
+    },
+  });
+
+  const onSubmit = async (data: TaskFormData) => {
+    if (!projectId || !data.userId) {
+      throw new Error("Project ID and User ID are required");
+    }
+
+    const createTaskData: CreateTaskBody = {
+      ...data,
+      projectId,
+      userId: data.userId,
+      deadline: data.deadline
+        ? new Date(data.deadline).toISOString()
+        : undefined,
+    };
+
+    await createTask(createTaskData);
   };
 
   return {
