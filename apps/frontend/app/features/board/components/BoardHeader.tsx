@@ -13,7 +13,6 @@ export const BoardHeader = () => {
   const { data: projects = [] } = useQuery(getAllProjectsQueryOptions());
   const navigate = useNavigate();
   const { projectId } = useParams();
-  console.log({ projectId });
 
   return (
     <div className="flex items-center justify-between border-b bg-card px-6 py-4">

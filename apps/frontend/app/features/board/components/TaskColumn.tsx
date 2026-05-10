@@ -1,4 +1,4 @@
-import type { TaskStatus } from "@repo/shared";
+import type { GetTasksQuery, TaskStatus } from "@repo/shared";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "~/lib/utils";
 import { getTasksByProjectIdQueryOptions } from "../queries/getTasksByProjectIdQueryOptions";
@@ -15,9 +15,12 @@ interface TaskColumnProps {
 export const TaskColumn = ({ status, label }: TaskColumnProps) => {
   const { projectId } = useParams();
 
-  const { data: tasks } = useQuery(
-    getTasksByProjectIdQueryOptions({ projectId: Number(projectId), status })
-  );
+  const filters: GetTasksQuery = { status };
+  if (projectId !== "all" && !isNaN(Number(projectId))) {
+    filters.projectId = Number(projectId);
+  }
+
+  const { data: tasks } = useQuery(getTasksByProjectIdQueryOptions(filters));
 
   if (!tasks) return <></>;
 
