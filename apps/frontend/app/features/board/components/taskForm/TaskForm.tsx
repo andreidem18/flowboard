@@ -62,7 +62,7 @@ export function TaskForm() {
                 isSubmitting={isSubmitting}
               />
               <TaskDeadlineInput
-                register={register}
+                control={control}
                 errors={errors}
                 isSubmitting={isSubmitting}
               />
