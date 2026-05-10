@@ -39,7 +39,7 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
       </div>
       <div className="flex-1 space-y-3 overflow-auto p-3">
         {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
+          <TaskCard key={task.id} task={task} projectId={Number(projectId)} />
         ))}
         {tasks.length === 0 && (
           <div className="py-8 text-center text-sm text-slate-400">
