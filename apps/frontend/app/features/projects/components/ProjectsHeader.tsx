@@ -1,16 +1,13 @@
-import type { Project } from "@repo/shared";
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { Button } from "~/components/ui/button";
-import { ProjectForm } from "./ProjectForm";
+import { useProjectsStore } from "../stores/useProjectsStore";
 
 export const ProjectsHeader = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const { setDialogOpen, setSelectedProject } = useProjectsStore();
 
   const openCreateDialog = () => {
-    setEditingProject(null);
-    setIsDialogOpen(true);
+    setSelectedProject(null);
+    setDialogOpen(true);
   };
 
   return (
@@ -26,11 +23,6 @@ export const ProjectsHeader = () => {
         <Plus className="mr-2 h-4 w-4" />
         New Project
       </Button>
-      <ProjectForm
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        project={editingProject}
-      />
     </div>
   );
 };

@@ -25,6 +25,7 @@ export const ProjectsList = () => {
     deleteConfirmOpen,
     confirmDelete,
     handleDeleteProject,
+    setSelectedProject,
     setDeleteConfirmOpen,
   } = useProjectsList();
 
@@ -50,8 +51,7 @@ export const ProjectsList = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    // TODO: add edit feature
-                    // onClick={() => openEditDialog(project)}
+                    onClick={() => setSelectedProject(project)}
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>

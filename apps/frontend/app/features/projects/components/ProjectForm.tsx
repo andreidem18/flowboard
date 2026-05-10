@@ -11,14 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
-import type { Project } from "@repo/shared";
 import { useProjectForm } from "../hooks/useProjectForm";
-
-interface Props {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  project?: Project | null;
-}
+import { useProjectsStore } from "../stores/useProjectsStore";
 
 const colorOptions = [
   "#3b82f6",
@@ -33,22 +27,33 @@ const colorOptions = [
   "#f97316",
 ];
 
-export function ProjectForm({ open, onOpenChange, project }: Props) {
+export function ProjectForm() {
   const { register, control, handleSubmit, errors, isSubmitting, onSubmit } =
     useProjectForm({
-      project,
-      onSuccess: () => onOpenChange(false),
+      onSuccess: () => {
+        setDialogOpen(false);
+      },
     });
 
+  const { selectedProject, isDialogOpen, setDialogOpen, setSelectedProject } =
+    useProjectsStore();
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      setSelectedProject(null);
+    }
+    setDialogOpen(isOpen);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {project ? "Edit Project" : "Create New Project"}
+            {selectedProject ? "Edit Project" : "Create New Project"}
           </DialogTitle>
           <DialogDescription>
-            {project
+            {selectedProject
               ? "Update project details"
               : "Add a new project to your workspace"}
           </DialogDescription>
@@ -111,13 +116,17 @@ export function ProjectForm({ open, onOpenChange, project }: Props) {
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => setDialogOpen(false)}
               disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : project ? "Update" : "Create"}
+              {isSubmitting
+                ? "Saving..."
+                : selectedProject
+                  ? "Update"
+                  : "Create"}
             </Button>
           </DialogFooter>
         </form>
