@@ -1,4 +1,4 @@
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { Cell, Pie, PieChart } from "recharts";
 import {
   Card,
   CardHeader,
@@ -6,9 +6,22 @@ import {
   CardDescription,
   CardContent,
 } from "~/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "~/components/ui/chart";
 import { useGetDashboardData } from "../queries";
 import { useMemo } from "react";
 import { formatPercentage } from "../utils";
+
+const chartConfig = {
+  New: { label: "New" },
+  "In Progress": { label: "In Progress" },
+  Stopped: { label: "Stopped" },
+  Finished: { label: "Finished" },
+} satisfies ChartConfig;
 
 export const TasksByStatusChart = () => {
   const { data } = useGetDashboardData();
@@ -39,8 +52,8 @@ export const TasksByStatusChart = () => {
           Distribution of tasks across different statuses
         </CardDescription>
       </CardHeader>
-      <CardContent className="h-75">
-        <ResponsiveContainer width="100%" height="100%">
+      <CardContent>
+        <ChartContainer config={chartConfig} className="h-75 w-full">
           <PieChart>
             <Pie
               data={tasksByStatus}
@@ -58,9 +71,9 @@ export const TasksByStatusChart = () => {
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip />
+            <ChartTooltip content={<ChartTooltipContent />} />
           </PieChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       </CardContent>
     </Card>
   );

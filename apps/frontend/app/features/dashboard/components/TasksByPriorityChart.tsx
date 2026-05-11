@@ -1,14 +1,5 @@
 import { useMemo } from "react";
-import {
-  ResponsiveContainer,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Bar,
-  Cell,
-  BarChart,
-  Tooltip,
-} from "recharts";
+import { CartesianGrid, XAxis, YAxis, Bar, Cell, BarChart } from "recharts";
 import {
   Card,
   CardHeader,
@@ -16,7 +7,19 @@ import {
   CardDescription,
   CardContent,
 } from "~/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "~/components/ui/chart";
 import { useGetDashboardData } from "../queries";
+
+const chartConfig = {
+  Low: { label: "Low" },
+  Medium: { label: "Medium" },
+  High: { label: "High" },
+} satisfies ChartConfig;
 
 export const TasksByPriorityChart = () => {
   const { data } = useGetDashboardData();
@@ -40,20 +43,20 @@ export const TasksByPriorityChart = () => {
         <CardTitle>Tasks by Priority</CardTitle>
         <CardDescription>Priority distribution of all tasks</CardDescription>
       </CardHeader>
-      <CardContent className="h-75">
-        <ResponsiveContainer width="100%" height="100%">
+      <CardContent>
+        <ChartContainer config={chartConfig} className="h-75 w-full">
           <BarChart data={tasksByPriority}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <ChartTooltip content={<ChartTooltipContent />} />
             <Bar dataKey="value" radius={[8, 8, 0, 0]}>
               {tasksByPriority.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Bar>
           </BarChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       </CardContent>
     </Card>
   );

@@ -1,13 +1,5 @@
 import { TrendingUp } from "lucide-react";
-import {
-  ResponsiveContainer,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Legend,
-  Bar,
-  BarChart,
-} from "recharts";
+import { CartesianGrid, XAxis, YAxis, Bar, BarChart } from "recharts";
 import {
   Card,
   CardHeader,
@@ -15,8 +7,20 @@ import {
   CardDescription,
   CardContent,
 } from "~/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+  type ChartConfig,
+} from "~/components/ui/chart";
 import { useGetDashboardData } from "../queries";
-import { ChartTooltip } from "~/components/ui/chart";
+
+const chartConfig = {
+  finishedTasks: { label: "Completed", color: "#10b981" },
+  notFinishedTasks: { label: "In Progress", color: "#f59e0b" },
+} satisfies ChartConfig;
 
 export const TasksByProjectChart = () => {
   const { data } = useGetDashboardData();
@@ -35,28 +39,26 @@ export const TasksByProjectChart = () => {
           Complete breakdown of tasks across projects
         </CardDescription>
       </CardHeader>
-      <CardContent className="h-75">
-        <ResponsiveContainer width="100%" height="100%">
+      <CardContent>
+        <ChartContainer config={chartConfig} className="h-75 w-full">
           <BarChart data={tasksByProject}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <ChartTooltip />
-            <Legend />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <ChartLegend content={<ChartLegendContent />} />
             <Bar
               dataKey="finishedTasks"
-              fill="#10b981"
-              name="Completed"
+              fill="var(--color-finishedTasks)"
               radius={[8, 8, 0, 0]}
             />
             <Bar
               dataKey="notFinishedTasks"
-              fill="#f59e0b"
-              name="In Progress"
+              fill="var(--color-notFinishedTasks)"
               radius={[8, 8, 0, 0]}
             />
           </BarChart>
-        </ResponsiveContainer>
+        </ChartContainer>
       </CardContent>
     </Card>
   );
