@@ -14,6 +14,7 @@ import "./app.css";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { Toaster } from "~/components/ui/sonner";
 import { ReactQueryClientProvider } from "./providers";
+import { TooltipProvider } from "./components/ui/tooltip";
 
 export function meta() {
   return [
@@ -37,10 +38,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <ThemeProvider defaultTheme="dark" storageKey="ui-theme">
           <ReactQueryClientProvider>
-            {children}
-            <Toaster />
-            <ScrollRestoration />
-            <Scripts />
+            <TooltipProvider>
+              {children}
+              <Toaster />
+              <ScrollRestoration />
+              <Scripts />
+            </TooltipProvider>
           </ReactQueryClientProvider>
         </ThemeProvider>
       </body>

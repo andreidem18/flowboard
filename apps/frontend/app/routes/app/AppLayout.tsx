@@ -6,6 +6,19 @@ import {
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router";
 import { Button } from "~/components/ui/button";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarTrigger,
+} from "~/components/ui/sidebar";
 import { Spinner } from "~/components/ui/spinner";
 import { ThemeToggle } from "~/components/ui/theme-toggle";
 import { useLogoutMutation } from "~/features/auth/mutations";
@@ -15,32 +28,44 @@ export default function AppLayout() {
   const { mutate: handleLogout, isPending } = useLogoutMutation();
 
   return (
-    <div className="flex size-full min-h-dvh flex-col">
-      <header className="flex items-center justify-between border-b px-6 py-4 transition-all duration-300">
-        <div className="flex items-center gap-6">
-          <h1 className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-xl font-semibold text-transparent">
+    <SidebarProvider>
+      <Sidebar collapsible="icon">
+        <SidebarHeader className="px-4 py-4">
+          <span className="bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-xl font-semibold text-transparent group-data-[collapsible=icon]:hidden">
             FlowBoard
-          </h1>
-          <nav className="flex gap-2">
+          </span>
+          <span className="hidden bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-xl font-semibold text-transparent group-data-[collapsible=icon]:block">
+            Fl
+          </span>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarMenu className="px-2">
             {NAV_LINKS.map((link) => {
               const Icon = link.icon;
-              const isActive = location.pathname === link.to;
+              const isActive = location.pathname.startsWith(link.to);
               return (
-                <Link key={link.to} to={link.to}>
-                  <Button variant={isActive ? "default" : "ghost"} size="sm">
-                    <Icon className="mr-2 h-4 w-4" />
-                    {link.label}
-                  </Button>
-                </Link>
+                <SidebarMenuItem key={link.to}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive}
+                    tooltip={link.label}
+                  >
+                    <Link to={link.to}>
+                      <Icon />
+                      <span>{link.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               );
             })}
-          </nav>
-        </div>
-        <div className="flex items-center gap-2">
+          </SidebarMenu>
+        </SidebarContent>
+        <SidebarFooter className="flex flex-col gap-1 px-2 pb-4">
           <ThemeToggle />
           <Button
             variant="ghost"
             size="sm"
+            className="w-full justify-start"
             onClick={() => handleLogout()}
             disabled={isPending}
           >
@@ -49,14 +74,23 @@ export default function AppLayout() {
             ) : (
               <LogOut className="mr-2 h-4 w-4" />
             )}
-            Logout
+            <span className="group-data-[collapsible=icon]:hidden">Logout</span>
           </Button>
-        </div>
-      </header>
-      <main className="flex-1 overflow-auto">
-        <Outlet />
-      </main>
-    </div>
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
+      <SidebarInset>
+        <header className="flex h-12 items-center border-b px-4">
+          <SidebarTrigger />
+          <span className="block bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-xl font-semibold text-transparent group-data-[collapsible=icon]:hidden md:hidden">
+            FlowBoard
+          </span>
+        </header>
+        <main className="flex-1 overflow-auto">
+          <Outlet />
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 
