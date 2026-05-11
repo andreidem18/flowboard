@@ -1,3 +1,4 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi, beforeEach } from "vitest";
@@ -5,6 +6,50 @@ import { BoardHeader } from "~/features/board/components/BoardHeader";
 import type { NavigateFunction } from "react-router";
 import { makeQueryResult, mockProjects } from "../test-utils";
 import type { Project } from "@repo/shared";
+
+function getTextContent(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(getTextContent).join("");
+  if (React.isValidElement(node))
+    return getTextContent(
+      (node.props as { children?: React.ReactNode }).children
+    );
+  return "";
+}
+
+vi.mock("~/components/ui/select", () => ({
+  Select: ({
+    children,
+    value,
+    onValueChange,
+  }: {
+    children: React.ReactNode;
+    value?: string;
+    onValueChange?: (value: string) => void;
+  }) => (
+    <select
+      value={value}
+      onChange={(e) => onValueChange?.(e.target.value)}
+      role="combobox"
+    >
+      {children}
+    </select>
+  ),
+  SelectTrigger: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+  SelectValue: () => null,
+  SelectContent: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+  SelectItem: ({
+    children,
+    value,
+  }: {
+    children: React.ReactNode;
+    value: string;
+  }) => <option value={value}>{getTextContent(children)}</option>,
+}));
 
 vi.mock("react-router", () => ({
   useNavigate: vi.fn(),
@@ -68,14 +113,14 @@ describe("BoardHeader", () => {
     expect(screen.getByText("Mobile")).toBeInTheDocument();
   });
 
-  it("renders project color indicators", () => {
+  it("renders one option per project plus the All Projects option", () => {
     vi.mocked(mockUseGetAllProjects).mockReturnValue(
       makeQueryResult(mockProjects)
     );
 
     const { container } = render(<BoardHeader />);
-    const colorDots = container.querySelectorAll('[class*="rounded-full"]');
-    expect(colorDots.length).toBeGreaterThan(0);
+    const options = container.querySelectorAll("option");
+    expect(options.length).toBe(mockProjects.length + 1);
   });
 
   it("navigates to selected project when option is clicked", async () => {
@@ -86,10 +131,7 @@ describe("BoardHeader", () => {
 
     render(<BoardHeader />);
     const select = screen.getByRole("combobox");
-    await user.click(select);
-
-    const backendOption = screen.getByText("Backend");
-    await user.click(backendOption);
+    await user.selectOptions(select, "2");
 
     expect(mockNavigate).toHaveBeenCalledWith("/app/board/2");
   });
@@ -102,10 +144,7 @@ describe("BoardHeader", () => {
 
     render(<BoardHeader />);
     const select = screen.getByRole("combobox");
-    await user.click(select);
-
-    const allOption = screen.getByText("All Projects");
-    await user.click(allOption);
+    await user.selectOptions(select, "all");
 
     expect(mockNavigate).toHaveBeenCalledWith("/app/board/all");
   });
