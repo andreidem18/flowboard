@@ -36,13 +36,16 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
           <h3 className="font-semibold">{label}</h3>
           <p className="text-sm text-slate-600">{tasks.length} tasks</p>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setSelectedStatus(status)}
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
+        {/* TODO: add project selector in form on the future */}
+        {projectId && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setSelectedStatus(status)}
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       <div className="flex-1 space-y-3 overflow-auto p-3">
         {tasks.map((task) => (
