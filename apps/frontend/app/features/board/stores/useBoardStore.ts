@@ -13,6 +13,8 @@ interface BoardStore {
   resetFormState: () => void;
 }
 
+export type { BoardStore };
+
 export const useBoardStore = create<BoardStore>()(
   devtools(
     (set, get) => ({
