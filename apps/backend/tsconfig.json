@@ -1,5 +1,4 @@
 {
-  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
