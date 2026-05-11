@@ -3,3 +3,4 @@ export { TasksByStatusChart } from "./TasksByStatusChart";
 export { TasksByPriorityChart } from "./TasksByPriorityChart";
 export { ProjectProgress } from "./ProjectProgress";
 export { UpcomingDeadlines } from "./UpcomingDeadlines";
+export { TasksByProjectChart } from "./TasksByProjectChart";

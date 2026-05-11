@@ -54,6 +54,10 @@ export const taskService = {
       inProgressTasks: project.tasks.filter(
         (task) => task.status === "IN_PROGRESS",
       ).length,
+
+      notFinishedTasks: project.tasks.filter(
+        (task) => task.status !== "FINISHED",
+      ).length,
     }));
 
     return {

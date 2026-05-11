@@ -2,6 +2,7 @@ import {
   DashboardOverview,
   ProjectProgress,
   TasksByPriorityChart,
+  TasksByProjectChart,
   TasksByStatusChart,
   UpcomingDeadlines,
 } from "~/features/dashboard/components";
@@ -26,6 +27,7 @@ export default function DashboardPage() {
         <ProjectProgress />
         <UpcomingDeadlines />
       </div>
+      <TasksByProjectChart />
     </div>
   );
 }

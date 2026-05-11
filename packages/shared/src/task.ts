@@ -78,6 +78,7 @@ export const tasksByProjectSchema = z.object({
   totalTasks: z.number(),
   finishedTasks: z.number(),
   inProgressTasks: z.number(),
+  notFinishedTasks: z.number(),
 });
 
 export const upcomingTasksSchema = z.object({
