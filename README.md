@@ -13,7 +13,7 @@ cp .env.docker.example .env.docker
 2. Ejecuta docker compose
 
 ```bash
-docker compose up --build
+docker compose --env-file .env.docker up --build
 ```
 
 3. Espera a que salga `🟢 backend running at localhost:3000`

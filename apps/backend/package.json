@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsup",
+    "build": "prisma generate && tsup",
     "start": "NODE_ENV=production prisma migrate deploy && prisma db seed && node dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest",

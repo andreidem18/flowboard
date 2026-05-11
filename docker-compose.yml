@@ -30,6 +30,10 @@ services:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    env_file:
+      - .env.docker
 
     depends_on:
       - backend-flowboard
