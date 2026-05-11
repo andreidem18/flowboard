@@ -34,25 +34,24 @@ The backend should follow a modular architecture organized by domain.
 Example:
 
 src/
-  modules/
-    auth/
-    projects/
-    tasks/
-  lib/
-  middleware/
-  plugins/
-  db/
-  app.ts
+modules/
+auth/
+projects/
+tasks/
+lib/
+middleware/
+plugins/
+db/
+app.ts
 
 Each module should follow this structure:
 
 modules/
-  tasks/
-    task.controller.ts
-    task.repository.ts
-    task.schema.ts
-    task.types.ts
-    task.routes.ts
+tasks/
+task.controller.ts
+task.repository.ts
+task.serializers.ts
+task.routes.ts
 
 ---
 
@@ -64,6 +63,7 @@ create them in the `packages/shared` module
 ## Controllers
 
 Controllers are responsible for:
+
 - handling HTTP requests
 - extracting params/body/query data
 - calling services
@@ -78,6 +78,7 @@ Controllers should remain thin and should NOT contain business logic.
 Services contain business logic.
 
 Responsibilities:
+
 - validations that belong to business rules
 - orchestration between repositories
 - transactional logic
@@ -92,6 +93,7 @@ Services should not directly depend on HTTP concepts.
 Repositories are responsible for database access.
 
 Responsibilities:
+
 - Prisma queries
 - data persistence
 - query composition
@@ -109,6 +111,7 @@ Repositories should avoid business logic.
 - Avoid deeply nested routes.
 
 Examples:
+
 - GET /projects
 - POST /projects
 - PATCH /tasks/:id
@@ -208,6 +211,7 @@ Redis or distributed caching should NOT be introduced unless explicitly required
 # Important Constraints
 
 DO NOT:
+
 - introduce microservices
 - introduce CQRS/event sourcing
 - add unnecessary abstraction layers
@@ -222,6 +226,7 @@ This project values clarity and pragmatism.
 # Goal
 
 The backend should feel:
+
 - modern
 - strongly typed
 - maintainable
