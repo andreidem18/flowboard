@@ -12,7 +12,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-
   backend-flowboard:
     build:
       context: .
@@ -27,6 +26,16 @@ services:
     env_file:
       - .env.docker
 
+  frontend-flowboard:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+
+    depends_on:
+      - backend-flowboard
+
+    ports:
+      - "5173:80"
+
 volumes:
   postgres_data:
-

@@ -1,20 +1,22 @@
 # Flowboard
 
-### Setup rápido con Docker 🐳
+### Setup rápido con Docker 🐳 (3 pasos)
 
-- Copia las variables de entorno de ejemplo
+1. Copia las variables de entorno de ejemplo
 
 ```bash
 cp .env.docker.example .env.docker
 ```
 
-- Ejecuta docker compose
+2. Ejecuta docker compose
 
 ```bash
 docker compose up --build
 ```
 
-*El primer build se demora unos minutos*⌛
+3. Espera a que salga `🟢 backend running at localhost:3000`
+
+*El primer build se puede demorar alrededor de 6 minutos*⌛
 
 ✅ Accede a la documentación del backend en
 

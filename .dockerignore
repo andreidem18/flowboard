@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+
+.git
+
+dist
+build
+coverage
+
+.env
+.env.*
+
+.vscode
+*.log
