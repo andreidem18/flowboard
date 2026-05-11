@@ -8,6 +8,8 @@ COPY . .
 
 RUN pnpm install
 
+RUN pnpm run prisma:generate
+
 RUN pnpm --filter backend build
 
 EXPOSE 3000
