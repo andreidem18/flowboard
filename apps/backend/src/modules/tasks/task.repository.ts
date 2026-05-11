@@ -119,22 +119,23 @@ export const taskRepository = {
   },
 
   async getDashboardUpcomingTasks() {
-    const now = new Date();
-
     const next7Days = new Date();
+    const past2Days = new Date();
     next7Days.setDate(next7Days.getDate() + 7);
+    past2Days.setDate(past2Days.getDate() - 2);
 
     return prisma.task.findMany({
       select: {
+        id: true,
         name: true,
         deadline: true,
         project: {
-          select: { id: true, name: true },
+          select: { id: true, name: true, color: true },
         },
       },
       where: {
         deadline: {
-          gte: now,
+          gte: past2Days,
           lte: next7Days,
         },
         status: {

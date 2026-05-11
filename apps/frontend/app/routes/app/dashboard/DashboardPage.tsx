@@ -3,6 +3,7 @@ import {
   ProjectProgress,
   TasksByPriorityChart,
   TasksByStatusChart,
+  UpcomingDeadlines,
 } from "~/features/dashboard/components";
 
 export default function DashboardPage() {
@@ -23,6 +24,7 @@ export default function DashboardPage() {
       </div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <ProjectProgress />
+        <UpcomingDeadlines />
       </div>
     </div>
   );

@@ -81,7 +81,9 @@ export const tasksByProjectSchema = z.object({
 });
 
 export const upcomingTasksSchema = z.object({
+  id: z.number(),
   name: z.string(),
+  daysLeft: z.number().nullable(),
   deadline: z.string().optional(),
   project: simpleProjectSchema,
 });
