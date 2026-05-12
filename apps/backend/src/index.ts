@@ -51,6 +51,8 @@ app.get("/ping", async () => {
   return "pong";
 });
 
-app.listen(3000, ({ hostname, port }) => {
+const PORT = env.PORT || 3000;
+
+app.listen(PORT, ({ hostname, port }) => {
   console.log(`🟢 Backend running at ${hostname}:${port}`);
 });
