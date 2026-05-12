@@ -2,6 +2,11 @@
 
 Flowboard es un gestor de proyectos y tareas tipo kanban, con autenticación, soporte móvil y API REST documentada.
 
+**Proyecto desplegado (AWS)**:
+
+- https://flowboard.andrescode.com/ (frontend)
+- https://flowboard-backend.andrescode.com/openapi (backend)
+
 ### Setup rápido con Docker 🐳 (3 pasos)
 
 1. Copia las variables de entorno de ejemplo
@@ -109,6 +114,7 @@ Para más información sobre la arquitectura del frontend y el backend:
 
 - [Documentación frontend](/.docs/docs-frontend.md)
 - [Documentación backend](/.docs/docs-backend.md)
+- [Deployment](/.docs/docs-deployment.md)
 
 #### Screenshots
 
