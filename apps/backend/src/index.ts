@@ -48,7 +48,7 @@ app.use(
 app.use(routes);
 
 app.get("/ping", async () => {
-  return "pong";
+  return "pong test";
 });
 
 const PORT = env.PORT || 3000;
