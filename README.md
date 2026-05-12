@@ -87,6 +87,21 @@ Los scripts disponibles desde la raíz del monorepo son:
 
 ```bash
 pnpm install
+```
+
+5. Ve al backend, genera prisma, migraciones y seed
+
+```bash
+cd apps/backend
+pnpm run prisma:generate
+pnpm run prisma:migrate
+pnpm run prisma:seed
+```
+
+6. Vuelve a la ruta raíz y ejecuta el proyecto
+
+```bash
+cd ../..
 pnpm dev
 ```
 
