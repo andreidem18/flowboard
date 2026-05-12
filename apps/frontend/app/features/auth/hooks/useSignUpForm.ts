@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { checkAuthError } from "../helpers";
 import { useSignupMutation } from "../mutations";
 import { type SignUpFormData, signUpSchema } from "../schemas/auth.schema";
+import { useNavigate } from "react-router";
 
 export const useSignUpForm = () => {
   const {
@@ -15,11 +16,15 @@ export const useSignUpForm = () => {
     resolver: zodResolver(signUpSchema),
   });
   const { mutateAsync: signupMutation } = useSignupMutation();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
       await signupMutation(data);
-      toast.success("Account created successfully");
+      navigate("/auth/login");
+      toast.success(
+        "Account created successfully. Login with your new credentials"
+      );
     } catch (error) {
       if (checkAuthError(error, "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL")) {
         setError("email", {

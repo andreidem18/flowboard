@@ -8,7 +8,10 @@ import {
 export default [
   index("routes/RedirectPage.tsx"),
 
-  route("/auth", "./routes/auth/AuthPage.tsx"),
+  layout("./routes/auth/AuthLayout.tsx", [
+    route("/auth/login", "./routes/auth/login/LoginPage.tsx"),
+    route("/auth/signup", "./routes/auth/signup/SignupPage.tsx"),
+  ]),
 
   layout("./guards/RequireSession.tsx", [
     layout("./routes/app/AppLayout.tsx", [

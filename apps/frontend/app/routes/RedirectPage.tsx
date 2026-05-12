@@ -6,7 +6,7 @@ export default function RedirectPage() {
 
   if (loading) return <></>;
 
-  if (!isAuthenticated) return <Navigate to="/auth" />;
+  if (!isAuthenticated) return <Navigate to="/auth/login" />;
 
   return <Navigate to="/app/dashboard" />;
 }

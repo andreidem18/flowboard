@@ -1,4 +1,4 @@
-import { Navigate } from "react-router";
+import { Link, Navigate, Outlet, useLocation } from "react-router";
 import {
   Card,
   CardContent,
@@ -6,12 +6,12 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { LoginForm, SignUpForm } from "~/features/auth/components";
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { useAuth } from "~/features/auth/hooks";
 
-export default function AuthPage() {
+export default function authLayout() {
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
   if (isAuthenticated) return <Navigate to="/" />;
 
   return (
@@ -26,18 +26,17 @@ export default function AuthPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="login">
+          <Tabs value={location.pathname}>
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="/auth/login" asChild>
+                <Link to="/auth/login">Login</Link>
+              </TabsTrigger>
+              <TabsTrigger value="/auth/signup" asChild>
+                <Link to="/auth/signup">Sign Up</Link>
+              </TabsTrigger>
             </TabsList>
-            <TabsContent value="login">
-              <LoginForm />
-            </TabsContent>
-            <TabsContent value="signup">
-              <SignUpForm />
-            </TabsContent>
           </Tabs>
+          <Outlet />
         </CardContent>
       </Card>
     </div>

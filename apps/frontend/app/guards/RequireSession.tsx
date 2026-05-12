@@ -4,6 +4,7 @@ import { useAuth } from "~/features/auth/hooks";
 export default function RequireSession() {
   const { isAuthenticated, loading } = useAuth();
 
-  if (!loading && !isAuthenticated) return <Navigate to="/auth" replace />;
+  if (!loading && !isAuthenticated)
+    return <Navigate to="/auth/login" replace />;
   return <Outlet />;
 }

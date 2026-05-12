@@ -16,14 +16,14 @@ function renderGuard(initialEntry = "/protected") {
         <Route element={<RequireSession />}>
           <Route path="/protected" element={<div>Protected content</div>} />
         </Route>
-        <Route path="/auth" element={<div>Auth page</div>} />
+        <Route path="/auth/login" element={<div>Auth page</div>} />
       </Routes>
     </MemoryRouter>
   );
 }
 
 describe("RequireSession", () => {
-  it("redirects to /auth when not authenticated", () => {
+  it("redirects to /auth/login when not authenticated", () => {
     vi.mocked(useAuth).mockReturnValue({
       isAuthenticated: false,
       loading: false,
