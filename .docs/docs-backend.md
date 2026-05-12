@@ -36,7 +36,7 @@ Cada módulo sigue la separación: **routes → services → repository**. Los c
 
 ## Modelos de datos
 
-![db-diagram](./db-diagram.png)
+![db-diagram](./diagrams/db-diagram.png)
 
 Las tareas tienen `status` (`NEW | IN_PROGRESS | STOPPED | FINISHED`) y `priority` (`LOW | MEDIUM | HIGH`).
 

@@ -1,6 +1,6 @@
 # Arquitectura y Despliegue - Flowboard
 
-![diagrama-despliegue](./deployment-diagram.webp)
+![diagrama-despliegue](./diagrams/deployment-diagram.webp)
 
 ---
 
