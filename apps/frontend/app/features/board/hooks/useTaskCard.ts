@@ -1,4 +1,5 @@
 import { useSortable } from "@dnd-kit/react/sortable";
+import { OptimisticSortingPlugin } from "@dnd-kit/dom/sortable";
 
 import { useState } from "react";
 import { useDeleteTaskMutation } from "../mutations";
@@ -33,12 +34,14 @@ export const useTaskCard = ({ task, projectId, index }: Props) => {
     });
   };
 
-  const { ref: cardRef } = useSortable({
+  const { ref: cardRef, isDropTarget } = useSortable({
     id: task.id,
     index,
     type: "task",
     accept: "task",
     group: task.status,
+    plugins: (defaults) =>
+      defaults.filter((p) => p !== OptimisticSortingPlugin),
   });
 
   return {
@@ -49,5 +52,6 @@ export const useTaskCard = ({ task, projectId, index }: Props) => {
     handleConfirmDelete,
     selectCard,
     cardRef,
+    isDropTarget,
   };
 };

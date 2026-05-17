@@ -8,6 +8,7 @@ import { Plus } from "lucide-react";
 import { TaskCard } from "./TaskCard";
 import { useBoardStore } from "../stores/useBoardStore";
 import { useProjectIdParam } from "../hooks";
+import { DropIndicator } from "./DropIndicator";
 
 interface TaskColumnProps {
   status: TaskStatus;
@@ -24,7 +25,7 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
 
   const { data: tasks } = useGetTasksByProjectId(filters);
 
-  const { ref: columnRef } = useDroppable({
+  const { ref: columnRef, isDropTarget } = useDroppable({
     id: status,
     type: "column",
     accept: "task",
@@ -37,7 +38,8 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
       ref={columnRef}
       className={cn(
         "flex flex-col rounded-lg border-2 transition-colors",
-        statusColors[status]
+        statusColors[status],
+        isDropTarget && "border-dashed"
       )}
     >
       <div className="flex items-center justify-between border-b p-4">
@@ -65,6 +67,7 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
             index={i}
           />
         ))}
+        <DropIndicator isDropTarget={isDropTarget} />
         {tasks.length === 0 && (
           <div className="py-8 text-center text-sm text-slate-400">
             No tasks
