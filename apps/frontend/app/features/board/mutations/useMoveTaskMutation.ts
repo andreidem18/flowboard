@@ -13,7 +13,9 @@ interface MoveTaskParams {
 
 export const useMoveTaskMutation = () => {
   return useMutation({
-    mutationFn: async (params: MoveTaskParams) => params,
+    mutationFn: async (params: MoveTaskParams) => {
+      return params;
+    },
     onMutate: ({
       fromIndex,
       toIndex,
@@ -53,6 +55,24 @@ export const useMoveTaskMutation = () => {
         const next = [...prev];
         next.splice(toIndex, 0, updatedTask);
         return next;
+      });
+    },
+    onError: (_, params) => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          TASKS_QUERY_KEY,
+          params.projectId,
+          params.sourceStatus,
+          undefined,
+        ],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [
+          TASKS_QUERY_KEY,
+          params.projectId,
+          params.targetStatus,
+          undefined,
+        ],
       });
     },
   });
