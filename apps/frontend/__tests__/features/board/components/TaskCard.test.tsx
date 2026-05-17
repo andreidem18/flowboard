@@ -17,6 +17,7 @@ const mockTask: Task = {
   id: 1,
   name: "Fix login bug",
   description: "User cannot login with special characters",
+  position: 1,
   priority: "HIGH",
   status: "IN_PROGRESS" as const,
   deadline: "2025-12-31",

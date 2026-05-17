@@ -6,6 +6,7 @@ const mockTask: Task = {
   id: 1,
   name: "Test Task",
   description: "Test description",
+  position: 1,
   priority: "HIGH",
   status: "NEW",
   deadline: null,

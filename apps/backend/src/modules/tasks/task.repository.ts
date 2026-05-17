@@ -21,7 +21,7 @@ export const taskRepository = {
         },
         user: { select: { name: true } },
       },
-      orderBy: { updatedAt: "desc" },
+      orderBy: { position: "asc" },
     });
   },
 
@@ -37,15 +37,22 @@ export const taskRepository = {
     return task;
   },
 
-  create(body: CreateTaskBody) {
-    return prisma.task.create({
-      data: body,
-      include: {
-        project: {
-          select: { name: true, color: true },
+  async create(body: CreateTaskBody) {
+    return prisma.$transaction(async (tx) => {
+      await tx.task.updateMany({
+        where: { projectId: body.projectId, status: body.status },
+        data: { position: { increment: 1 } },
+      });
+
+      return await tx.task.create({
+        data: { ...body, position: 1 },
+        include: {
+          project: {
+            select: { name: true, color: true },
+          },
+          user: { select: { name: true } },
         },
-        user: { select: { name: true } },
-      },
+      });
     });
   },
 
