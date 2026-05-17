@@ -1,3 +1,5 @@
+import { useDroppable } from "@dnd-kit/react";
+
 import type { GetTasksQuery, TaskStatus } from "@repo/shared";
 import { cn } from "~/lib/utils";
 import { useGetTasksByProjectId } from "../queries";
@@ -22,10 +24,17 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
 
   const { data: tasks } = useGetTasksByProjectId(filters);
 
+  const { ref: columnRef } = useDroppable({
+    id: status,
+    type: "column",
+    accept: "task",
+  });
+
   if (!tasks) return <></>;
 
   return (
     <div
+      ref={columnRef}
       className={cn(
         "flex flex-col rounded-lg border-2 transition-colors",
         statusColors[status]
@@ -48,8 +57,13 @@ export const TaskColumn = ({ status, label }: TaskColumnProps) => {
         )}
       </div>
       <div className="flex-1 space-y-3 overflow-auto p-3">
-        {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} projectId={Number(projectId)} />
+        {tasks.map((task, i) => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            projectId={Number(projectId)}
+            index={i}
+          />
         ))}
         {tasks.length === 0 && (
           <div className="py-8 text-center text-sm text-slate-400">

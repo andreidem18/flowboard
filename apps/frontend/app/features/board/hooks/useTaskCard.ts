@@ -1,3 +1,5 @@
+import { useSortable } from "@dnd-kit/react/sortable";
+
 import { useState } from "react";
 import { useDeleteTaskMutation } from "../mutations";
 import type { Task } from "@repo/shared";
@@ -6,9 +8,10 @@ import { useBoardStore } from "../stores/useBoardStore";
 interface Props {
   task: Task;
   projectId: number;
+  index: number;
 }
 
-export const useTaskCard = ({ task, projectId }: Props) => {
+export const useTaskCard = ({ task, projectId, index }: Props) => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const { mutate: deleteTask, isPending } = useDeleteTaskMutation({
     projectId,
@@ -30,6 +33,14 @@ export const useTaskCard = ({ task, projectId }: Props) => {
     });
   };
 
+  const { ref: cardRef } = useSortable({
+    id: task.id,
+    index,
+    type: "task",
+    accept: "task",
+    group: task.status,
+  });
+
   return {
     deleteConfirmOpen,
     setDeleteConfirmOpen,
@@ -37,5 +48,6 @@ export const useTaskCard = ({ task, projectId }: Props) => {
     isOverdue,
     handleConfirmDelete,
     selectCard,
+    cardRef,
   };
 };

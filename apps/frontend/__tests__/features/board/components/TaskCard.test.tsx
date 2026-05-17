@@ -55,7 +55,7 @@ describe("TaskCard", () => {
   });
 
   it("renders task name", () => {
-    render(<TaskCard task={mockTask} projectId={1} />);
+    render(<TaskCard task={mockTask} projectId={1} index={0} />);
     expect(screen.getByText("Fix login bug")).toBeInTheDocument();
   });
 
@@ -67,7 +67,7 @@ describe("TaskCard", () => {
       selectCard: selectCardMock,
     } as unknown as TaskCardHook);
 
-    render(<TaskCard task={mockTask} projectId={1} />);
+    render(<TaskCard task={mockTask} projectId={1} index={0} />);
 
     const editButton = screen.getAllByRole("button")[0];
     await user.click(editButton);
@@ -83,7 +83,7 @@ describe("TaskCard", () => {
       setDeleteConfirmOpen: setDeleteConfirmOpenMock,
     } as unknown as TaskCardHook);
 
-    render(<TaskCard task={mockTask} projectId={1} />);
+    render(<TaskCard task={mockTask} projectId={1} index={0} />);
 
     const deleteButton = screen.getAllByRole("button")[1];
     await user.click(deleteButton);
@@ -99,7 +99,7 @@ describe("TaskCard", () => {
     } as unknown as TaskCardHook);
 
     const { container } = render(
-      <TaskCard task={finishedTask} projectId={1} />
+      <TaskCard task={finishedTask} projectId={1} index={0} />
     );
     // The finished task should show deadline in normal slate color
     const slateTexts = container.querySelectorAll(".text-slate-600");
@@ -113,7 +113,7 @@ describe("TaskCard", () => {
     } as unknown as TaskCardHook);
 
     const { container } = render(
-      <TaskCard task={mockTaskOverdue} projectId={1} />
+      <TaskCard task={mockTaskOverdue} projectId={1} index={0} />
     );
     // The overdue indicator should have the red text class
     const overdueDates = container.querySelectorAll(".text-red-600");
@@ -127,7 +127,7 @@ describe("TaskCard", () => {
       deleteConfirmOpen: true,
     } as unknown as TaskCardHook);
 
-    render(<TaskCard task={mockTask} projectId={1} />);
+    render(<TaskCard task={mockTask} projectId={1} index={0} />);
     // The delete confirm dialog should be open with isPending true
     // This affects the delete confirmation behavior
   });
