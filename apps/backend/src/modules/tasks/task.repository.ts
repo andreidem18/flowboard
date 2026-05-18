@@ -73,6 +73,8 @@ export const taskRepository = {
     });
   },
 
+  // Dashboard
+
   async getDashboardTaskCount(): Promise<TasksCount> {
     const [
       completedTasks,

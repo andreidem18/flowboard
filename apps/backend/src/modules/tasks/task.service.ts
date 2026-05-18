@@ -2,10 +2,12 @@ import {
   CreateTaskBody,
   Dashboard,
   GetTasksQuery,
+  TaskStatus,
   UpdateTaskBody,
 } from "@repo/shared";
 import { taskRepository } from "./task.repository";
 import { serializeTask, serializeUpcomingTasks } from "./task.serializers";
+import { taskOrderingRepository } from "./task-ordering.repository";
 
 export const taskService = {
   async getAll(filters: GetTasksQuery) {
@@ -32,6 +34,19 @@ export const taskService = {
     await taskRepository.getOne(id);
     const task = await taskRepository.update(id, body);
     return serializeTask(task);
+  },
+
+  async reorder(id: number, newPosition: number, newStatus: TaskStatus) {
+    await taskRepository.getOne(id);
+    const reorderedTask = await taskOrderingRepository.reorder(
+      id,
+      newPosition,
+      newStatus,
+    );
+    return {
+      newPosition: reorderedTask.position,
+      newStatus: reorderedTask.status,
+    };
   },
 
   async getDashboardData(): Promise<Dashboard> {

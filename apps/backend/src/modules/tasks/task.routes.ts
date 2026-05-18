@@ -5,6 +5,8 @@ import {
   deleteResSchema,
   getAllTasksSchema,
   getTasksQuerySchema,
+  reorderTaskBodySchema,
+  reorderTaskResponseSchema,
   taskSchema,
   updateTaskBodySchema,
 } from "@repo/shared";
@@ -50,6 +52,22 @@ taskRoutes.post(
   {
     body: createTaskBodySchema,
     response: { 201: taskSchema },
+    auth: true,
+  },
+);
+
+taskRoutes.post(
+  "/:id/reorder",
+  async ({ params: { id }, body }) => {
+    const { newPosition, newStatus } = body;
+    return await taskService.reorder(id, newPosition, newStatus);
+  },
+  {
+    params: numericIdParamSchema,
+    body: reorderTaskBodySchema,
+    response: {
+      200: reorderTaskResponseSchema,
+    },
     auth: true,
   },
 );
