@@ -38,7 +38,7 @@ export const createTaskBodySchema = z.object({
   name: z.string(),
   description: z.string().optional(),
   priority: taskPrioritySchema.optional(),
-  status: taskStatusSchema.optional(),
+  status: taskStatusSchema,
   deadline: z.iso.datetime().optional(),
   projectId: z.number().int(),
   userId: z.string(),
@@ -59,12 +59,12 @@ export const getTasksQuerySchema = z.object({
 });
 
 export const reorderTaskBodySchema = z.object({
-  newPosition: z.number().int(),
+  newPosition: z.number().int().min(1),
   newStatus: taskStatusSchema,
 });
 
 export const reorderTaskResponseSchema = z.object({
-  newPosition: z.number().int(),
+  newPosition: z.number().int().min(1),
   newStatus: taskStatusSchema,
 });
 

@@ -35,7 +35,11 @@ describe("taskOrderingRepository", () => {
         position: { gt: 3 },
       };
 
-      await taskOrderingRepository.shiftPositions(prisma, where, +1);
+      await taskOrderingRepository.shiftPositions({
+        tx: prisma,
+        where,
+        delta: +1,
+      });
 
       expect(prisma.task.updateMany).toHaveBeenCalledTimes(2);
 
@@ -59,7 +63,11 @@ describe("taskOrderingRepository", () => {
         position: { gte: 2 },
       };
 
-      await taskOrderingRepository.shiftPositions(prisma, where, -1);
+      await taskOrderingRepository.shiftPositions({
+        tx: prisma,
+        where,
+        delta: -1,
+      });
 
       expect(prisma.task.updateMany).toHaveBeenNthCalledWith(2, {
         where: { ...where, position: { lt: -500_000 } },
@@ -76,7 +84,11 @@ describe("taskOrderingRepository", () => {
         position: { gt: 5 },
       };
 
-      await taskOrderingRepository.shiftPositions(prisma, where, -1);
+      await taskOrderingRepository.shiftPositions({
+        tx: prisma,
+        where,
+        delta: -1,
+      });
 
       const secondCall = vi.mocked(prisma.task.updateMany).mock.calls[1]![0];
       expect(secondCall.where).toMatchObject({
@@ -92,7 +104,12 @@ describe("taskOrderingRepository", () => {
     it("shifts rows with position > P down by 1", async () => {
       vi.mocked(prisma.task.updateMany).mockResolvedValue({ count: 0 });
 
-      await taskOrderingRepository.closeGap(prisma, 1, "NEW", 3);
+      await taskOrderingRepository.closeGap({
+        tx: prisma,
+        projectId: 1,
+        status: "NEW",
+        position: 3,
+      });
 
       expect(prisma.task.updateMany).toHaveBeenNthCalledWith(1, {
         where: { projectId: 1, status: "NEW", position: { gt: 3 } },
@@ -114,7 +131,12 @@ describe("taskOrderingRepository", () => {
     it("shifts rows with position >= P up by 1", async () => {
       vi.mocked(prisma.task.updateMany).mockResolvedValue({ count: 0 });
 
-      await taskOrderingRepository.makeRoom(prisma, 1, "NEW", 2);
+      await taskOrderingRepository.makeRoom({
+        tx: prisma,
+        projectId: 1,
+        status: "NEW",
+        position: 2,
+      });
 
       expect(prisma.task.updateMany).toHaveBeenNthCalledWith(1, {
         where: { projectId: 1, status: "NEW", position: { gte: 2 } },
@@ -136,7 +158,13 @@ describe("taskOrderingRepository", () => {
     it("moves rows up when newPosition < oldPosition", async () => {
       vi.mocked(prisma.task.updateMany).mockResolvedValue({ count: 0 });
 
-      await taskOrderingRepository.reorderInSameColumn(prisma, 1, "NEW", 5, 2);
+      await taskOrderingRepository.reorderInSameColumn({
+        tx: prisma,
+        projectId: 1,
+        status: "NEW",
+        oldPosition: 5,
+        newPosition: 2,
+      });
 
       expect(prisma.task.updateMany).toHaveBeenCalledTimes(2);
       expect(prisma.task.updateMany).toHaveBeenNthCalledWith(1, {
@@ -160,7 +188,13 @@ describe("taskOrderingRepository", () => {
     it("moves rows down when newPosition > oldPosition", async () => {
       vi.mocked(prisma.task.updateMany).mockResolvedValue({ count: 0 });
 
-      await taskOrderingRepository.reorderInSameColumn(prisma, 1, "NEW", 2, 5);
+      await taskOrderingRepository.reorderInSameColumn({
+        tx: prisma,
+        projectId: 1,
+        status: "NEW",
+        oldPosition: 2,
+        newPosition: 5,
+      });
 
       expect(prisma.task.updateMany).toHaveBeenCalledTimes(2);
       expect(prisma.task.updateMany).toHaveBeenNthCalledWith(1, {
@@ -186,14 +220,14 @@ describe("taskOrderingRepository", () => {
     it("closes the gap in the source column, then makes room in the target column", async () => {
       vi.mocked(prisma.task.updateMany).mockResolvedValue({ count: 0 });
 
-      await taskOrderingRepository.moveToDifferentColumn(
-        prisma,
-        1,
-        "NEW",
-        2,
-        "IN_PROGRESS",
-        1,
-      );
+      await taskOrderingRepository.moveToDifferentColumn({
+        tx: prisma,
+        projectId: 1,
+        oldStatus: "NEW",
+        oldPosition: 2,
+        newStatus: "IN_PROGRESS",
+        newPosition: 1,
+      });
 
       // closeGap (2 calls) + makeRoom (2 calls) = 4 updateMany
       expect(prisma.task.updateMany).toHaveBeenCalledTimes(4);
@@ -232,12 +266,12 @@ describe("taskOrderingRepository", () => {
     it("updates a single task's position and status", async () => {
       vi.mocked(prisma.task.update).mockResolvedValue(mockTaskWithDates);
 
-      await taskOrderingRepository.updateTaskPosition(
-        prisma,
-        10,
-        4,
-        "FINISHED",
-      );
+      await taskOrderingRepository.updateTaskPosition({
+        tx: prisma,
+        id: 10,
+        position: 4,
+        status: "FINISHED",
+      });
 
       expect(prisma.task.update).toHaveBeenCalledWith({
         where: { id: 10 },
@@ -251,7 +285,11 @@ describe("taskOrderingRepository", () => {
       vi.mocked(prisma.task.findUnique).mockResolvedValue(null);
 
       await expect(
-        taskOrderingRepository.reorder(999, 0, "NEW"),
+        taskOrderingRepository.reorder({
+          id: 999,
+          newPosition: 1,
+          newStatus: "NEW",
+        }),
       ).rejects.toThrow(NotFoundError);
 
       expect(prisma.task.update).not.toHaveBeenCalled();
@@ -266,7 +304,11 @@ describe("taskOrderingRepository", () => {
       };
       vi.mocked(prisma.task.findUnique).mockResolvedValue(task);
 
-      const result = await taskOrderingRepository.reorder(task.id, 3, "NEW");
+      const result = await taskOrderingRepository.reorder({
+        id: task.id,
+        newPosition: 3,
+        newStatus: "NEW",
+      });
 
       expect(result).toBe(task);
       expect(prisma.task.update).not.toHaveBeenCalled();
@@ -285,9 +327,13 @@ describe("taskOrderingRepository", () => {
       vi.mocked(prisma.task.update).mockResolvedValue(task);
       vi.mocked(prisma.task.updateMany).mockResolvedValue({ count: 0 });
 
-      await taskOrderingRepository.reorder(task.id, 2, "NEW");
+      await taskOrderingRepository.reorder({
+        id: task.id,
+        newPosition: 2,
+        newStatus: "NEW",
+      });
 
-      // Stash to -1 first.
+      // Stash to -8 first.
       expect(prisma.task.update).toHaveBeenNthCalledWith(1, {
         where: { id: 7 },
         data: { position: -1, status: "NEW" },
@@ -323,7 +369,11 @@ describe("taskOrderingRepository", () => {
       vi.mocked(prisma.task.update).mockResolvedValue(task);
       vi.mocked(prisma.task.updateMany).mockResolvedValue({ count: 0 });
 
-      await taskOrderingRepository.reorder(task.id, 1, "IN_PROGRESS");
+      await taskOrderingRepository.reorder({
+        id: task.id,
+        newPosition: 1,
+        newStatus: "IN_PROGRESS",
+      });
 
       // Stash first.
       expect(prisma.task.update).toHaveBeenNthCalledWith(1, {

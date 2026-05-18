@@ -31,7 +31,7 @@ export const ReactQueryClientProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && import.meta.env.DEV) {
     window.__TANSTACK_QUERY_CLIENT__ = queryClient;
   }
   return (
