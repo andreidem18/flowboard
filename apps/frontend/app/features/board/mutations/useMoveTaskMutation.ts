@@ -2,19 +2,38 @@ import { useMutation } from "@tanstack/react-query";
 import type { GetAllTasks, TaskStatus } from "@repo/shared";
 import { queryClient } from "~/providers/ReactQueryClientProvider";
 import { TASKS_QUERY_KEY } from "../queries";
+import env from "~/lib/env";
 
 interface MoveTaskParams {
   fromIndex: number;
   toIndex: number;
   sourceStatus: TaskStatus;
   targetStatus: TaskStatus;
+  taskId: number;
   projectId?: number;
 }
 
 export const useMoveTaskMutation = () => {
   return useMutation({
     mutationFn: async (params: MoveTaskParams) => {
-      return params;
+      const response = await fetch(
+        `${env.VITE_API_URL}/tasks/${params.taskId}/reorder`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            newPosition: params.toIndex + 1, // convert to 1-based index for the backend
+            newStatus: params.targetStatus,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to move task");
+      }
+
+      return response.json();
     },
     onMutate: ({
       fromIndex,
@@ -58,6 +77,25 @@ export const useMoveTaskMutation = () => {
       });
     },
     onError: (_, params) => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          TASKS_QUERY_KEY,
+          params.projectId,
+          params.sourceStatus,
+          undefined,
+        ],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [
+          TASKS_QUERY_KEY,
+          params.projectId,
+          params.targetStatus,
+          undefined,
+        ],
+      });
+    },
+    onSuccess: (_, params) => {
+      // Invalidate the query to ensure fresh data
       queryClient.invalidateQueries({
         queryKey: [
           TASKS_QUERY_KEY,
