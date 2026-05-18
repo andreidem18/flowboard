@@ -164,6 +164,7 @@ export const mockCreateTaskBody: CreateTaskBody = {
   description: "New task description",
   priority: "MEDIUM",
   deadline: DATE_FIXTURES.futureDate,
+  status: "NEW",
   projectId: 1,
   userId: "seed-user-alice",
 };

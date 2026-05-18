@@ -38,7 +38,7 @@ export const createTaskBodySchema = z.object({
   name: z.string(),
   description: z.string().optional(),
   priority: taskPrioritySchema.optional(),
-  status: taskStatusSchema.optional(),
+  status: taskStatusSchema,
   deadline: z.iso.datetime().optional(),
   projectId: z.number().int(),
   userId: z.string(),

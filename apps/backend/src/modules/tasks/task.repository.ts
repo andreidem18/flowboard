@@ -40,11 +40,12 @@ export const taskRepository = {
 
   async create(body: CreateTaskBody) {
     return prisma.$transaction(async (tx) => {
-      await taskOrderingRepository.shiftPositions(
+      await taskOrderingRepository.makeRoom({
         tx,
-        { projectId: body.projectId, status: body.status },
-        +1,
-      );
+        projectId: body.projectId,
+        status: body.status,
+        position: 1,
+      });
 
       return await tx.task.create({
         data: { ...body, position: 1 },

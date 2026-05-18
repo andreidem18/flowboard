@@ -211,7 +211,6 @@ describe("TaskService", () => {
 
   describe("reorder", () => {
     it("should reorder a task and return new position and status", async () => {
-      vi.mocked(taskRepository.getOne).mockResolvedValue(mockTaskWithDates);
       vi.mocked(taskOrderingRepository.reorder).mockResolvedValue({
         ...mockTaskWithDates,
         position: 3,
@@ -220,24 +219,22 @@ describe("TaskService", () => {
 
       const result = await taskService.reorder(1, 3, "IN_PROGRESS");
 
-      expect(taskRepository.getOne).toHaveBeenCalledWith(1);
-      expect(taskOrderingRepository.reorder).toHaveBeenCalledWith(
-        1,
-        3,
-        "IN_PROGRESS",
-      );
+      expect(taskOrderingRepository.reorder).toHaveBeenCalledWith({
+        id: 1,
+        newPosition: 3,
+        newStatus: "IN_PROGRESS",
+      });
       expect(result).toEqual({ newPosition: 3, newStatus: "IN_PROGRESS" });
     });
 
     it("should throw error when task does not exist", async () => {
-      vi.mocked(taskRepository.getOne).mockRejectedValue(
+      vi.mocked(taskOrderingRepository.reorder).mockRejectedValue(
         new Error("Task not found"),
       );
 
       await expect(taskService.reorder(999, 1, "NEW")).rejects.toThrow(
         "Task not found",
       );
-      expect(taskOrderingRepository.reorder).not.toHaveBeenCalled();
     });
 
     it("should propagate error from ordering repository", async () => {

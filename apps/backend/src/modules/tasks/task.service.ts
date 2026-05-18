@@ -37,11 +37,11 @@ export const taskService = {
   },
 
   async reorder(id: number, newPosition: number, newStatus: TaskStatus) {
-    const reorderedTask = await taskOrderingRepository.reorder(
+    const reorderedTask = await taskOrderingRepository.reorder({
       id,
       newPosition,
       newStatus,
-    );
+    });
     return {
       newPosition: reorderedTask.position,
       newStatus: reorderedTask.status,
