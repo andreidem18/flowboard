@@ -13,6 +13,7 @@ SPA construida con **React 19** y **React Router v7** en modo CSR, con gestión 
 | Formularios    | React Hook Form + Zod                |
 | Gráficas       | Recharts                             |
 | Notificaciones | Sonner                               |
+| Drag and drop  | Dnd kit                              |
 | Tests          | Vitest + React Testing Library       |
 
 ## Estructura
@@ -57,7 +58,7 @@ React Router v7 en modo **Framework (CSR)**. Las rutas se declaran en `app/route
 El estado se divide en dos capas con responsabilidades bien delimitadas:
 
 **Server state — React Query**
-Todo lo que viene del backend vive en React Query: fetching, caché, revalidación e invalidación tras mutaciones. Los query keys están centralizados dentro de cada feature. `staleTime` se configura por query según la frecuencia esperada de cambio (la sesión tiene 5 min; las tareas del board se revalidan en cada foco).
+Todo lo que viene del backend vive en React Query: fetching, caché, revalidación e invalidación tras mutaciones. Los query keys están centralizados dentro de cada feature. Las mutaciones realizan `optimistics updates` en features claves como el reordenamiento para mejorar la experiencia de usuario. `staleTime` se configura por query según la frecuencia esperada de cambio (la sesión tiene 5 min; las tareas del board se revalidan en cada foco).
 
 **Client state — Zustand**
 Solo se usa para estado de UI que necesita ser compartido entre componentes sin prop-drilling: el task seleccionado en el board (`useBoardStore`), el diálogo abierto y el status pre-seleccionado al crear una tarea. No hay estado global de negocio; si un dato viene del servidor, vive en React Query.
