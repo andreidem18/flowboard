@@ -14,7 +14,7 @@ ensureEnvValid();
 
 const app = new Elysia({ adapter: node() });
 
-app.onBeforeHandle(requestLogger);
+app.use(requestLogger);
 
 app.onError(errorHandler);
 

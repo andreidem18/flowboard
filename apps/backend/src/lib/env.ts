@@ -11,6 +11,9 @@ const envSchema = z.object({
   SEED_USER_PASSWORD: z.string(),
   FRONT_URL: z.string(),
   PORT: z.string().optional(),
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
 });
 
 type EnvType = z.infer<typeof envSchema>;
