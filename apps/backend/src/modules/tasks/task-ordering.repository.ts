@@ -16,12 +16,13 @@ export const taskOrderingRepository = {
 
       if (noChanges) return task;
 
-      const stashPosition = -(id + 1);
-
+      // Temporaly stash the reordered task at position -1 to free up its
+      // current position for the upcoming shifts without violating the
+      // UNIQUE (projectId, status, position) constraint.
       await this.updateTaskPosition({
         tx,
         id,
-        position: stashPosition,
+        position: -1,
         status: oldStatus,
       });
 

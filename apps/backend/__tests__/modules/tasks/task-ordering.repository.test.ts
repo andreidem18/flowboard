@@ -287,7 +287,7 @@ describe("taskOrderingRepository", () => {
       await expect(
         taskOrderingRepository.reorder({
           id: 999,
-          newPosition: 0,
+          newPosition: 1,
           newStatus: "NEW",
         }),
       ).rejects.toThrow(NotFoundError);
@@ -336,7 +336,7 @@ describe("taskOrderingRepository", () => {
       // Stash to -8 first.
       expect(prisma.task.update).toHaveBeenNthCalledWith(1, {
         where: { id: 7 },
-        data: { position: -8, status: "NEW" },
+        data: { position: -1, status: "NEW" },
       });
 
       // Then the two-pass shift from reorderInSameColumn (move UP).
@@ -378,7 +378,7 @@ describe("taskOrderingRepository", () => {
       // Stash first.
       expect(prisma.task.update).toHaveBeenNthCalledWith(1, {
         where: { id: 9 },
-        data: { position: -10, status: "NEW" },
+        data: { position: -1, status: "NEW" },
       });
 
       // closeGap (source) + makeRoom (target) = 4 updateMany.

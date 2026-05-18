@@ -238,7 +238,6 @@ describe("TaskService", () => {
     });
 
     it("should propagate error from ordering repository", async () => {
-      vi.mocked(taskRepository.getOne).mockResolvedValue(mockTaskWithDates);
       vi.mocked(taskOrderingRepository.reorder).mockRejectedValue(
         new Error("Reorder failed"),
       );
