@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import type { CreateTaskBody, UpdateTaskBody } from "@repo/shared";
 import { taskService } from "@/modules/tasks/task.service";
 import { taskRepository } from "@/modules/tasks/task.repository";
+import { taskOrderingRepository } from "@/modules/tasks/task-ordering.repository";
 import {
   mockCreateTaskBody,
   mockUpdateTaskBody,
@@ -27,11 +28,7 @@ vi.mock("@/modules/tasks/task.repository", () => ({
 
 vi.mock("@/modules/tasks/task-ordering.repository", () => ({
   taskOrderingRepository: {
-    getAll: vi.fn(),
-    create: vi.fn(),
-    getOne: vi.fn(),
-    delete: vi.fn(),
-    update: vi.fn(),
+    reorder: vi.fn(),
   },
 }));
 
@@ -209,6 +206,49 @@ describe("TaskService", () => {
         "Update failed",
       );
       expect(taskRepository.getOne).toHaveBeenCalledWith(taskId);
+    });
+  });
+
+  describe("reorder", () => {
+    it("should reorder a task and return new position and status", async () => {
+      vi.mocked(taskRepository.getOne).mockResolvedValue(mockTaskWithDates);
+      vi.mocked(taskOrderingRepository.reorder).mockResolvedValue({
+        ...mockTaskWithDates,
+        position: 3,
+        status: "IN_PROGRESS",
+      });
+
+      const result = await taskService.reorder(1, 3, "IN_PROGRESS");
+
+      expect(taskRepository.getOne).toHaveBeenCalledWith(1);
+      expect(taskOrderingRepository.reorder).toHaveBeenCalledWith(
+        1,
+        3,
+        "IN_PROGRESS",
+      );
+      expect(result).toEqual({ newPosition: 3, newStatus: "IN_PROGRESS" });
+    });
+
+    it("should throw error when task does not exist", async () => {
+      vi.mocked(taskRepository.getOne).mockRejectedValue(
+        new Error("Task not found"),
+      );
+
+      await expect(taskService.reorder(999, 1, "NEW")).rejects.toThrow(
+        "Task not found",
+      );
+      expect(taskOrderingRepository.reorder).not.toHaveBeenCalled();
+    });
+
+    it("should propagate error from ordering repository", async () => {
+      vi.mocked(taskRepository.getOne).mockResolvedValue(mockTaskWithDates);
+      vi.mocked(taskOrderingRepository.reorder).mockRejectedValue(
+        new Error("Reorder failed"),
+      );
+
+      await expect(taskService.reorder(1, 2, "NEW")).rejects.toThrow(
+        "Reorder failed",
+      );
     });
   });
 });
