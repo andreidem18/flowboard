@@ -19,10 +19,22 @@ export const queryClient = new QueryClient({
   }),
 });
 
+// TypeScript only:
+declare global {
+  interface Window {
+    __TANSTACK_QUERY_CLIENT__: QueryClient;
+  }
+}
+
 export const ReactQueryClientProvider = ({
   children,
 }: {
   children: React.ReactNode;
-}) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-);
+}) => {
+  if (typeof window !== "undefined") {
+    window.__TANSTACK_QUERY_CLIENT__ = queryClient;
+  }
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};

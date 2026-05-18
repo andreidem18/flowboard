@@ -43,6 +43,7 @@ export const mockTask1: Task = {
   id: 1,
   name: "Task 1",
   description: "First task",
+  position: 1,
   priority: "HIGH",
   status: "NEW",
   deadline: null,

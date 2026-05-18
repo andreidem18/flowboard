@@ -26,6 +26,7 @@ model Task {
   id          Int     @id @default(autoincrement())
   name        String
   description String?
+  position    Int
 
   status   TaskStatus   @default(NEW)
   priority TaskPriority @default(MEDIUM)
@@ -45,6 +46,7 @@ model Task {
   @@index([projectId])
   @@index([status])
   @@index([deadline])
+  @@unique([projectId, status, position])
   @@map("tasks")
 }
 

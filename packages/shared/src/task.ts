@@ -16,6 +16,7 @@ export const taskSchema = z.object({
   description: z.string().nullable(),
   status: taskStatusSchema,
   priority: taskPrioritySchema,
+  position: z.number().int(),
   deadline: z.string().nullable(),
   finishedAt: z.string().nullable(),
   createdAt: z.string(),
@@ -55,6 +56,16 @@ export const getTasksQuerySchema = z.object({
   projectId: z.coerce.number().int().optional(),
   userId: z.string().optional(),
   status: taskStatusSchema.optional(),
+});
+
+export const reorderTaskBodySchema = z.object({
+  newPosition: z.number().int(),
+  newStatus: taskStatusSchema,
+});
+
+export const reorderTaskResponseSchema = z.object({
+  newPosition: z.number().int(),
+  newStatus: taskStatusSchema,
 });
 
 // Dashboard
@@ -102,6 +113,8 @@ export type GetAllTasks = z.infer<typeof getAllTasksSchema>;
 export type CreateTaskBody = z.infer<typeof createTaskBodySchema>;
 export type UpdateTaskBody = z.infer<typeof updateTaskBodySchema>;
 export type GetTasksQuery = z.infer<typeof getTasksQuerySchema>;
+export type ReorderTaskBody = z.infer<typeof reorderTaskBodySchema>;
+export type ReorderTaskResponse = z.infer<typeof reorderTaskResponseSchema>;
 
 // Dashboard
 export type TasksCount = z.infer<typeof tasksCountSchema>;

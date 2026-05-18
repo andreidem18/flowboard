@@ -25,6 +25,16 @@ vi.mock("@/modules/tasks/task.repository", () => ({
   },
 }));
 
+vi.mock("@/modules/tasks/task-ordering.repository", () => ({
+  taskOrderingRepository: {
+    getAll: vi.fn(),
+    create: vi.fn(),
+    getOne: vi.fn(),
+    delete: vi.fn(),
+    update: vi.fn(),
+  },
+}));
+
 describe("TaskService", () => {
   beforeEach(() => {
     vi.clearAllMocks();

@@ -8,13 +8,15 @@ import { DeleteConfirmDialog } from "~/components/ui/delete-confirm-dialog";
 import { useTaskCard } from "../hooks";
 import { UserAvatar } from "./UserAvatar";
 import { PRIORITY_COLORS } from "../constants";
+import { DropIndicator } from "./DropIndicator";
 
 interface Props {
   task: Task;
   projectId: number;
+  index: number;
 }
 
-export const TaskCard = ({ task, projectId }: Props) => {
+export const TaskCard = ({ task, projectId, index }: Props) => {
   const {
     deleteConfirmOpen,
     setDeleteConfirmOpen,
@@ -22,11 +24,14 @@ export const TaskCard = ({ task, projectId }: Props) => {
     isOverdue,
     handleConfirmDelete,
     selectCard,
-  } = useTaskCard({ task, projectId });
+    cardRef,
+    isDropTarget,
+  } = useTaskCard({ task, projectId, index });
 
   return (
     <>
-      <Card className={`py-2 transition-shadow hover:shadow-md`}>
+      <DropIndicator isDropTarget={isDropTarget} />
+      <Card className={"py-2 transition-shadow hover:shadow-md"} ref={cardRef}>
         <CardHeader className="px-3 pt-1 pb-2">
           <div className="flex items-start justify-between gap-2">
             <h4 className="text-sm font-medium">{task.name}</h4>
