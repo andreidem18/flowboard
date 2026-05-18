@@ -6,6 +6,7 @@ import {
   UpdateTaskBody,
 } from "@repo/shared";
 import { NotFoundError } from "elysia";
+import { taskOrderingRepository } from "./task-ordering.repository";
 
 export const taskRepository = {
   getAll(filters: GetTasksQuery) {
@@ -39,10 +40,11 @@ export const taskRepository = {
 
   async create(body: CreateTaskBody) {
     return prisma.$transaction(async (tx) => {
-      await tx.task.updateMany({
-        where: { projectId: body.projectId, status: body.status },
-        data: { position: { increment: 1 } },
-      });
+      await taskOrderingRepository.shiftPositions(
+        tx,
+        { projectId: body.projectId, status: body.status },
+        +1,
+      );
 
       return await tx.task.create({
         data: { ...body, position: 1 },
