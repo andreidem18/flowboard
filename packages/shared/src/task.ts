@@ -59,12 +59,12 @@ export const getTasksQuerySchema = z.object({
 });
 
 export const reorderTaskBodySchema = z.object({
-  newPosition: z.number().int(),
+  newPosition: z.number().int().min(1),
   newStatus: taskStatusSchema,
 });
 
 export const reorderTaskResponseSchema = z.object({
-  newPosition: z.number().int(),
+  newPosition: z.number().int().min(1),
   newStatus: taskStatusSchema,
 });
 

@@ -37,7 +37,6 @@ export const taskService = {
   },
 
   async reorder(id: number, newPosition: number, newStatus: TaskStatus) {
-    await taskRepository.getOne(id);
     const reorderedTask = await taskOrderingRepository.reorder(
       id,
       newPosition,

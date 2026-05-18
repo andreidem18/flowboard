@@ -24,8 +24,10 @@ export const taskOrderingRepository = {
         return task;
       }
 
+      const stashPosition = -(id + 1);
+
       // temporarily move the task to a position that won't interfere with the reordering
-      await this.updateTaskPosition(tx, id, -1, oldStatus);
+      await this.updateTaskPosition(tx, id, stashPosition, oldStatus);
 
       if (isSameColumn) {
         await this.reorderInSameColumn(
